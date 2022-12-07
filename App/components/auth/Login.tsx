@@ -44,6 +44,8 @@ export default function Login() {
   const navigation = useNavigation();
   const {country, setCountry, initCountry, verification, signIn} = useAuth();
 
+  console.log(country, 'country');
+
   const {identify, logEvent} = useMixpanel();
   const {autoClockOut} = useClockIn();
 
@@ -91,9 +93,8 @@ export default function Login() {
   }, [loginType]);
 
   const isEmployeeCodeLogin = loginType == LoginCodes.emp;
-
   useEffect(() => {
-    initCountry();
+    // initCountry();
     (async () => {
       const _username = await getStorageData(USERNAME_STORAGE_KEY);
       const _loginType = await getStorageData(LOGIN_TYPE_STORAGE_KEY);

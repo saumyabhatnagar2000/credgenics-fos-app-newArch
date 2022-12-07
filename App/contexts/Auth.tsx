@@ -270,7 +270,7 @@ const AuthProvider: React.FC = ({children}) => {
         setCountry(fetchedCountry as CountryCodes);
       }
     } catch (e) {
-      //
+      console.log(e, 'error here');
     }
   };
 

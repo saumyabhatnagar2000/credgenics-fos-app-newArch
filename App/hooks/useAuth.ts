@@ -6,8 +6,7 @@ import { AuthContext } from '../contexts/Auth'
 // and permit components to subscribe to AuthContext updates
 export function useAuth(): AuthContextData {
     
-    // const context = useContext(AuthContext);
-    const context:any={};
+    const context = useContext(AuthContext);
 
     if (!context) {
         throw new Error('useAuth must be used within an AuthProvider');

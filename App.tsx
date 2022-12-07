@@ -136,23 +136,23 @@ function App() {
           <Provider store={store}>
             <PersistGate loading={null} persistor={persistor}>
               <MixpanelProvider>
-                {/* <AuthProvider> */}
-                <ClockInStatusContextProvider>
-                  <LocationProvider>
-                    <ActionProvider>
-                      <TaskFilterProvider>
-                        <TaskHistoryFilterProvider>
-                          <TaskProvider>
-                            <PaperProvider>
-                              <Navigation colorScheme={colorScheme} />
-                            </PaperProvider>
-                          </TaskProvider>
-                        </TaskHistoryFilterProvider>
-                      </TaskFilterProvider>
-                    </ActionProvider>
-                  </LocationProvider>
-                </ClockInStatusContextProvider>
-                {/* </AuthProvider> */}
+                <AuthProvider>
+                  <ClockInStatusContextProvider>
+                    <LocationProvider>
+                      <ActionProvider>
+                        <TaskFilterProvider>
+                          <TaskHistoryFilterProvider>
+                            <TaskProvider>
+                              <PaperProvider>
+                                <Navigation colorScheme={colorScheme} />
+                              </PaperProvider>
+                            </TaskProvider>
+                          </TaskHistoryFilterProvider>
+                        </TaskFilterProvider>
+                      </ActionProvider>
+                    </LocationProvider>
+                  </ClockInStatusContextProvider>
+                </AuthProvider>
               </MixpanelProvider>
             </PersistGate>
           </Provider>
