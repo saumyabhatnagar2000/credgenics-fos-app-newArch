@@ -1,0 +1,13 @@
+{
+    "ENV": "staging",
+    "BASE_URL": "https://api.staging.credgenics.com",
+    "BASE_URL_IDN": "https://apiidn.staging.credgenics.com",
+    "CODEPUSH": {
+        "deploymentKey": {
+            "android": "XkYKTO1UOOq4EAeXzG2MFjWAXZ37gQBaJqEpm",
+            "ios": ""
+        }
+    },
+    "REFERER": "https://ui.staging.credgenics.com/",
+    "AUTH_PUBLIC_KEY": "-----BEGIN PUBLIC KEY-----\nMIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEAjbLiwY2+XspERK+F9/W6\nQrSaHOSN6lx3F1Qx+LFTStnciET7bQEhlH3EQvYD2IYreWD18i86G+46f/ASKF4D\nO0fjV/f/5RJoA2C+9HKXeUC78KU93ElxahwMdUhmD+jozEBouAQYIYA3HmYkvAhP\naHKYH+7CDWONkKNv7beTApuS9L0lX6ZeFIOnzJ9eXpmAyHpKHcWIV4OvBpeiqDv/\nbVrBQ1cRI07UoYIdsocgfpTrbu7nIxVCbIkIy97P330FYfHtKWGejuSvgvDnN3Od\nig/rNbpMEQaScH2aDSDrPgmAkP5pSkYD7G4R4/oSygGePQA6Fp7LddC/RRqRPN2q\nYBWVt7qvbnZulQRK2zGQjAcbrR4xFGpKn8wdYUXo9LgxPHYr3p6OGkpMxnp7VlWp\n1DxL1eIMscQHk8uXqLbzCNUiCjpGO3eP1iC5YETfgcJq8YQuDRf3tD+XKJTyIxke\nbVJOudo/iHKSGtd3GQQoS7qIgTX9teomxdBYxhBg8FiIIZ3UoF/s+D0znoE29LVv\nzIZdgN7ezRGKQF/dYo9264AiF7fQOeNh83KRJAeguXFoN0OAmmifdh16YjdQUSwG\nsVfFjRgQB/bbaNXsNwia2EFRVPAL9orfxfdeJsZgoB1AD74kXJ3wlzwSNc07waNd\n2DQ9hxdQKjVureN9cY9bKPUCAwEAAQ==\n-----END PUBLIC KEY-----"
+}

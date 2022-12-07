@@ -1,126 +1,215 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * Generated with the TypeScript template
- * https://github.com/react-native-community/react-native-template-typescript
- *
- * @format
- */
+import React, {useEffect, useState} from 'react';
+import {SafeAreaProvider} from 'react-native-safe-area-context';
+import {View, StyleSheet, Modal, Dimensions} from 'react-native';
 
-import React, {type PropsWithChildren} from 'react';
-import {
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  useColorScheme,
-  View,
-  TextInput,
-} from 'react-native';
-import {GestureHandlerRootView} from 'react-native-gesture-handler';
+import useColorScheme from './App/hooks/useColorScheme';
+import Navigation from './App/navigation';
+import {AuthProvider} from './App/contexts/Auth';
+import {Portal, Provider as PaperProvider} from 'react-native-paper';
+import {ActionProvider} from './App/contexts/ActionContext';
+import {TaskProvider} from './App/contexts/TaskContext';
+import CodePush from 'react-native-code-push';
+import config from './App/config';
+import Typography, {
+  TypographyFontFamily,
+  TypographyVariants,
+} from './App/components/ui/Typography';
+import {ClockInStatusContextProvider} from './App/contexts/ClockInStatusContext';
+import * as Sentry from '@sentry/react-native';
+import packageJson from './package.json';
+import {SENTRY_DSN} from './App/constants/Sentry';
+import useDeviceVerification from './App/hooks/useDeviceVerification';
+import {TaskFilterProvider} from './App/contexts/TaskFilterContext';
+import {TaskHistoryFilterProvider} from './App/contexts/TaskHistoryFilterContext';
+import {LocationProvider} from './App/contexts/LocationContext';
+import {MixpanelProvider} from './App/contexts/MixpanelContext';
+import {RFPercentage} from 'react-native-responsive-fontsize';
+import {ProgressBar} from './App/components/common/ProgressBar';
+import ErrorBoundary from './App/components/ErrorBoundary';
+import {Provider} from 'react-redux';
+import {PersistGate} from 'redux-persist/integration/react';
+import {persistor, store} from './App/redux/store';
 
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
+function App() {
+  const [isDeviceVerifyLoading, isDeviceVerified] = useDeviceVerification();
+  const colorScheme = useColorScheme();
+  const [showIsUpdatedModal, setShowIsUpdatedModal] = useState(false);
+  const [bytesDownloaded, setBytesDownloaded] = useState(0);
+  const [totalBytesDown, setTotalBytesDown] = useState(0);
 
-const Section: React.FC<
-  PropsWithChildren<{
-    title: string;
-  }>
-> = ({children, title}) => {
-  const isDarkMode = useColorScheme() === 'dark';
+  const isLoadingComplete = !isDeviceVerifyLoading;
 
-  return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
-        {children}
-      </Text>
-    </View>
-  );
-};
-
-const App = () => {
-  const isDarkMode = useColorScheme() === 'dark';
-
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
+  var onError = function (error: any) {
+    Sentry.captureMessage('Codepush error');
   };
 
-  return (
-    <GestureHandlerRootView style={{flex: 1}}>
-      <SafeAreaView style={backgroundStyle}>
-        <StatusBar
-          barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-          backgroundColor={backgroundStyle.backgroundColor}
-        />
+  const onDownloadProgress = ({
+    receivedBytes,
+    totalBytes,
+  }: {
+    receivedBytes: number;
+    totalBytes: number;
+  }) => {
+    CodePush.disallowRestart();
+    if (!showIsUpdatedModal) {
+      setShowIsUpdatedModal(true);
+    }
+    if (totalBytesDown == 0) setTotalBytesDown(totalBytes);
 
-        <ScrollView
-          contentInsetAdjustmentBehavior="automatic"
-          style={backgroundStyle}>
-          <Header />
-          <View
-            style={{
-              backgroundColor: isDarkMode ? Colors.black : Colors.white,
-            }}>
-            <Section title="Step One">
-              Edit <Text style={styles.highlight}>App.tsx</Text> to change this
-              screen and then come back to see your edits.
-            </Section>
-            <Section title="See Your Changes">
-              <ReloadInstructions />
-            </Section>
-            <Section title="Debug">
-              <DebugInstructions />
-            </Section>
-            <Section title="Learn More">
-              Read the docs to discover what to do next:
-            </Section>
-            <LearnMoreLinks />
-          </View>
-        </ScrollView>
-      </SafeAreaView>
-    </GestureHandlerRootView>
-  );
-};
+    setBytesDownloaded(receivedBytes);
+    if (receivedBytes >= totalBytes) {
+      setShowIsUpdatedModal(false);
+      CodePush.allowRestart();
+    }
+  };
+  const onSyncStatusChange = function (SyncStatus: CodePush.SyncStatus) {
+    switch (SyncStatus) {
+      case 2:
+        setShowIsUpdatedModal(true);
+        break;
+    }
+  };
+
+  useEffect(() => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+    __DEV__ ||
+      CodePush.sync(
+        {
+          rollbackRetryOptions: {
+            delayInHours: 0.05,
+            maxRetryAttempts: 20,
+          },
+          deploymentKey: config.CODEPUSH.deploymentKey.android,
+          installMode: CodePush.InstallMode.IMMEDIATE,
+        },
+        onSyncStatusChange,
+        onDownloadProgress,
+        onError,
+      );
+  }, []);
+
+  if (!isLoadingComplete) {
+    return null;
+    // show no loader when loading resources
+  } else {
+    if (!isDeviceVerified) {
+      return (
+        <View style={styles.rootedDeviceContainer}>
+          <Typography style={styles.rootedText}>
+            {`Trouble verifying the device.`}
+          </Typography>
+        </View>
+      );
+    } else if (showIsUpdatedModal) {
+      return (
+        <View>
+          <Modal visible={showIsUpdatedModal} transparent>
+            <View style={styles.containerStyle}>
+              <Typography
+                variant={TypographyVariants.body}
+                style={{
+                  fontFamily: TypographyFontFamily.heavy,
+                  marginBottom: RFPercentage(1),
+                }}>
+                Update in Progress
+              </Typography>
+              <Typography
+                style={styles.modalText}
+                variant={TypographyVariants.caption}>
+                {` Please do not close the app during\n the update.`}
+              </Typography>
+              <ProgressBar
+                title="Bytes"
+                progress={bytesDownloaded}
+                total={totalBytesDown}
+                showPercentage
+              />
+            </View>
+          </Modal>
+        </View>
+      );
+    }
+
+    return (
+      <ErrorBoundary>
+        <SafeAreaProvider>
+          <Provider store={store}>
+            <PersistGate loading={null} persistor={persistor}>
+              <MixpanelProvider>
+                {/* <AuthProvider> */}
+                <ClockInStatusContextProvider>
+                  <LocationProvider>
+                    <ActionProvider>
+                      <TaskFilterProvider>
+                        <TaskHistoryFilterProvider>
+                          <TaskProvider>
+                            <PaperProvider>
+                              <Navigation colorScheme={colorScheme} />
+                            </PaperProvider>
+                          </TaskProvider>
+                        </TaskHistoryFilterProvider>
+                      </TaskFilterProvider>
+                    </ActionProvider>
+                  </LocationProvider>
+                </ClockInStatusContextProvider>
+                {/* </AuthProvider> */}
+              </MixpanelProvider>
+            </PersistGate>
+          </Provider>
+        </SafeAreaProvider>
+      </ErrorBoundary>
+    );
+  }
+}
 
 const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
+  rootedDeviceContainer: {
+    alignItems: 'center',
+    flex: 1,
+    paddingHorizontal: 20,
+    top: '70%',
   },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
+  rootedText: {
+    textAlign: 'center',
+    color: 'red',
+    fontSize: 16,
+    lineHeight: 26,
   },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
+  containerStyle: {
+    backgroundColor: '#fff',
+    width: '80%',
+    alignSelf: 'center',
+    borderRadius: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingVertical: RFPercentage(3),
+    paddingHorizontal: RFPercentage(2),
+    marginTop: Dimensions.get('screen').height - RFPercentage(31),
   },
-  highlight: {
-    fontWeight: '700',
+  modalText: {
+    textAlign: 'center',
+    lineHeight: RFPercentage(2),
+    marginBottom: RFPercentage(1),
   },
 });
 
+// const codepushOptions = {
+//   checkFrequency: CodePush.CheckFrequency.MANUAL,
+//   deploymentKey: config.CODEPUSH.deploymentKey.android,
+// };
+
+// const routingInstrumentation = new Sentry.ReactNavigationInstrumentation();
+
+// Sentry.init({
+//   enabled: !__DEV__,
+//   dsn: SENTRY_DSN,
+//   integrations: [new Sentry.ReactNativeTracing({routingInstrumentation})],
+//   environment: config.ENV,
+//   release: `com.credgenics.fos@${packageJson.version}+codepush:${packageJson.codepushDistVersion}`,
+//   dist: packageJson.codepushDistVersion,
+// });
+
+// const prodApp = CodePush(codepushOptions)(Sentry.wrap(App));
+
+// export default __DEV__ ? App : prodApp;
 export default App;
