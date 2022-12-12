@@ -542,30 +542,31 @@ export default function DetailsHeader({
                         <SideChevron />
                     </TouchableOpacity>
                 )}
-                {companyType == CompanyType.loan && tabDetails?.loan_details && (
-                    <>
-                        <ExpandableView
-                            name="Loan Details"
-                            dataList={filterDetails?.loan_details}
-                            hasChevron={false}
-                            expanded={showLoanDetailsByDefault}
-                            extraData={{
-                                openSheet: () => {
-                                    openLateFeeSheet();
-                                }
-                            }}
-                        />
-                        <OnlineOnly>
-                            <Typography
-                                variant={TypographyVariants.body1}
-                                style={styles.viewMoreText}
-                                onPress={navigateToLoanDetails}
-                            >
-                                View More
-                            </Typography>
-                        </OnlineOnly>
-                    </>
-                )}
+                {companyType == CompanyType.loan &&
+                    tabDetails?.loan_details && (
+                        <>
+                            <ExpandableView
+                                name="Loan Details"
+                                dataList={filterDetails?.loan_details}
+                                hasChevron={false}
+                                expanded={showLoanDetailsByDefault}
+                                extraData={{
+                                    openSheet: () => {
+                                        openLateFeeSheet();
+                                    }
+                                }}
+                            />
+                            <OnlineOnly>
+                                <Typography
+                                    variant={TypographyVariants.body1}
+                                    style={styles.viewMoreText}
+                                    onPress={navigateToLoanDetails}
+                                >
+                                    View More
+                                </Typography>
+                            </OnlineOnly>
+                        </>
+                    )}
                 {companyType == CompanyType.credit_line && (
                     <>
                         <TouchableOpacity

@@ -49,7 +49,7 @@ export const MixpanelProvider = ({ children }) => {
 
         const subscription = AppState.addEventListener(
             'change',
-            nextAppState => {
+            (nextAppState) => {
                 logAppStateEvent(nextAppState);
             }
         );
@@ -59,7 +59,7 @@ export const MixpanelProvider = ({ children }) => {
     }, [logEvent]);
 
     const identify = React.useCallback(
-        userdata => {
+        (userdata) => {
             const { user_id, mobile, name, assigned_companies, email } =
                 userdata;
             mixpanel?.identify(user_id);

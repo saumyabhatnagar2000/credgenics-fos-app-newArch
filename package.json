@@ -9,7 +9,7 @@
         "postinstall": "patch-package",
         "test": "jest",
         "lint": "tsc --noEmit && eslint --ext .js,.jsx,.ts,.tsx ./",
-        "prettier:write": "npx prettier --write App/**/*.{js,jsx,ts,tsx,json} && npx prettier --write *.{js,jsx,ts,tsx,json}",
+        "prettier:write": "npx prettier -- --write App/**/*.{js,jsx,ts,tsx,json} && npx prettier -- --write *.{js,jsx,ts,tsx,json}",
         "precommit": "lint-staged",
         "app-build": "npx jetify && npx react-native run-android --active-arch-only"
     },
