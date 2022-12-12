@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
-import {View, StyleSheet, Modal, Dimensions} from 'react-native';
+import {View, StyleSheet, Modal, Dimensions, StatusBar} from 'react-native';
 
 import useColorScheme from './App/hooks/useColorScheme';
 import Navigation from './App/navigation';
@@ -29,6 +29,8 @@ import ErrorBoundary from './App/components/ErrorBoundary';
 import {Provider} from 'react-redux';
 import {PersistGate} from 'redux-persist/integration/react';
 import {persistor, store} from './App/redux/store';
+import {GestureHandlerRootView} from 'react-native-gesture-handler';
+import {BLUE_DARK} from './App/constants/Colors';
 
 function App() {
   const [isDeviceVerifyLoading, isDeviceVerified] = useDeviceVerification();
@@ -131,33 +133,35 @@ function App() {
     }
 
     return (
-      <ErrorBoundary>
-        <SafeAreaProvider>
-          <Provider store={store}>
-            <PersistGate loading={null} persistor={persistor}>
-              <MixpanelProvider>
-                <AuthProvider>
-                  <ClockInStatusContextProvider>
-                    <LocationProvider>
-                      <ActionProvider>
-                        <TaskFilterProvider>
-                          <TaskHistoryFilterProvider>
-                            <TaskProvider>
-                              <PaperProvider>
-                                <Navigation colorScheme={colorScheme} />
-                              </PaperProvider>
-                            </TaskProvider>
-                          </TaskHistoryFilterProvider>
-                        </TaskFilterProvider>
-                      </ActionProvider>
-                    </LocationProvider>
-                  </ClockInStatusContextProvider>
-                </AuthProvider>
-              </MixpanelProvider>
-            </PersistGate>
-          </Provider>
-        </SafeAreaProvider>
-      </ErrorBoundary>
+      <GestureHandlerRootView style={{flex: 1}}>
+        <ErrorBoundary>
+          <SafeAreaProvider>
+            <Provider store={store}>
+              <PersistGate loading={null} persistor={persistor}>
+                <MixpanelProvider>
+                  <AuthProvider>
+                    <ClockInStatusContextProvider>
+                      <LocationProvider>
+                        <ActionProvider>
+                          <TaskFilterProvider>
+                            <TaskHistoryFilterProvider>
+                              <TaskProvider>
+                                <PaperProvider>
+                                  <Navigation colorScheme={colorScheme} />
+                                </PaperProvider>
+                              </TaskProvider>
+                            </TaskHistoryFilterProvider>
+                          </TaskFilterProvider>
+                        </ActionProvider>
+                      </LocationProvider>
+                    </ClockInStatusContextProvider>
+                  </AuthProvider>
+                </MixpanelProvider>
+              </PersistGate>
+            </Provider>
+          </SafeAreaProvider>
+        </ErrorBoundary>
+      </GestureHandlerRootView>
     );
   }
 }

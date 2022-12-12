@@ -41,7 +41,7 @@
     "formik": "^2.2.9",
     "intl": "^1.2.5",
     "lodash": "^4.17.21",
-    "mixpanel-react-native": "^1.5.0",
+    "mixpanel-react-native": "^2.1.0",
     "moment": "^2.29.1",
     "number-to-words": "^1.2.4",
     "patch-package": "^6.5.0",

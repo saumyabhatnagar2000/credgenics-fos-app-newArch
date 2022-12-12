@@ -11,12 +11,16 @@ const MixpanelContext = React.createContext();
 export const useMixpanel = () => React.useContext(MixpanelContext);
 
 export const MixpanelProvider = ({ children }) => {
+    const trackAutomaticEvents = true;
     const [mixpanel, setMixpanel] = React.useState(null);
     const appState = React.useRef(AppState.currentState);
 
     React.useEffect(() => {
         if (config.ENV === 'production') {
-            const mixpanelInstance = new Mixpanel(MIXPANEL_TOKEN);
+            const mixpanelInstance = new Mixpanel(
+                MIXPANEL_TOKEN,
+                trackAutomaticEvents
+            );
             mixpanelInstance.init();
             setMixpanel(mixpanelInstance);
         }
@@ -43,14 +47,19 @@ export const MixpanelProvider = ({ children }) => {
             }
         };
 
-        AppState.addEventListener('change', (nextAppState) => {
-            logAppStateEvent(nextAppState);
-        });
-        return () => AppState.removeEventListener('change', () => {});
+        const subscription = AppState.addEventListener(
+            'change',
+            nextAppState => {
+                logAppStateEvent(nextAppState);
+            }
+        );
+        return () => {
+            subscription.remove();
+        };
     }, [logEvent]);
 
     const identify = React.useCallback(
-        (userdata) => {
+        userdata => {
             const { user_id, mobile, name, assigned_companies, email } =
                 userdata;
             mixpanel?.identify(user_id);

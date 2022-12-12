@@ -26,22 +26,13 @@ export default function BottomTabNavigator() {
     <BottomTab.Navigator
       initialRouteName="HomeTab"
       detachInactiveScreens
-      tabBarOptions={{
-        style: {
-          height: RFPercentage(9),
-          backgroundColor: '#fff',
-          borderTopWidth: 0,
-          elevation: 0,
-          shadowOffset: {
-            width: 0,
-            height: 0,
-          },
-        },
-        tabStyle: {
-          paddingTop: RFPercentage(1.6),
-          alignItems: 'center',
-        },
-        labelStyle: {
+      screenOptions={{
+        headerShown: false,
+        tabBarHideOnKeyboard: true,
+        tabBarActiveTintColor: Colors[colorScheme].tabIconSelected,
+        tabBarInactiveTintColor: GREY_3,
+        tabBarShowLabel: true,
+        tabBarLabelStyle: {
           flex: 1,
           alignSelf: 'center',
           marginTop: RFPercentage(0.5),
@@ -49,11 +40,22 @@ export default function BottomTabNavigator() {
           fontSize: RFPercentage(1.2),
           textTransform: 'uppercase',
         },
-        activeTintColor: Colors[colorScheme].tabIconSelected,
-        inactiveTintColor: GREY_3,
-        showLabel: true,
-        keyboardHidesTabBar: true,
-        // activeBackgroundColor: Colors[colorScheme].activeTabBackground
+        tabBarItemStyle: {
+          paddingTop: 15,
+          alignItems: 'center',
+        },
+        tabBarStyle: [
+          {
+            display: 'flex',
+            height: RFPercentage(7.5),
+            borderTopWidth: 0,
+            elevation: 0,
+            shadowOffset: {
+              width: 0,
+              height: 0,
+            },
+          },
+        ],
       }}>
       <BottomTab.Screen
         name="HomeTab"
