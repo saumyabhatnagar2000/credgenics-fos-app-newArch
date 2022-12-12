@@ -1,18 +1,18 @@
-import React, {useMemo} from 'react';
-import {ToastAndroid} from 'react-native';
-import {Dimensions, StyleSheet, View} from 'react-native';
-import {FAB} from '@rneui/themed';
-import {TouchableOpacity} from 'react-native-gesture-handler';
+import React, { useMemo } from 'react';
+import { ToastAndroid } from 'react-native';
+import { Dimensions, StyleSheet, View } from 'react-native';
+import { FAB } from '@rneui/themed';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 import Pdf from 'react-native-pdf';
 import CustomAppBar from '../../components/common/AppBar';
-import {useAuth} from '../../hooks/useAuth';
-import {sendReceipt} from '../../services/communicationService';
-import {handleDownloadFile} from '../../services/utils';
-import {Icon} from '@rneui/base';
-import {RFPercentage} from 'react-native-responsive-fontsize';
+import { useAuth } from '../../hooks/useAuth';
+import { sendReceipt } from '../../services/communicationService';
+import { handleDownloadFile } from '../../services/utils';
+import { Icon } from '@rneui/base';
+import { RFPercentage } from 'react-native-responsive-fontsize';
 import RNPrint from 'react-native-print';
-import {useNavigation} from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import RNFetchBlob from 'rn-fetch-blob';
 import useCommon from '../../hooks/useCommon';
 
@@ -22,33 +22,33 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     flex: 1,
     justifyContent: 'flex-start',
-    marginTop: 25,
+    marginTop: 25
   },
   fabStyle: {
     bottom: 10,
     position: 'absolute',
-    right: 10,
+    right: 10
   },
   pdf: {
     flex: 1,
     height: Dimensions.get('window').height,
-    width: Dimensions.get('window').width,
+    width: Dimensions.get('window').width
   },
 
   row: {
-    flexDirection: 'row',
-  },
+    flexDirection: 'row'
+  }
 });
 
-export default function ReceiptPDFScreen({route}: {route: any}) {
-  const {url, extraData, base64} = route.params;
-  const {authData} = useAuth();
-  const {navigate} = useNavigation();
-  const {isInternetAvailable} = useCommon();
-
+export default function ReceiptPDFScreen({ route }: { route: any }) {
+  const { url, extraData, base64 } = route.params;
+  const { authData } = useAuth();
+  const { navigate } = useNavigation();
+  const { isInternetAvailable } = useCommon();
+  console.log(url);
   const source = {
     uri: url,
-    cache: true,
+    cache: true
   };
 
   const downloadFile = () => {
@@ -59,13 +59,13 @@ export default function ReceiptPDFScreen({route}: {route: any}) {
         `/CG_Collect_${Date.now()}_Offline_Receipt.pdf`;
       RNFetchBlob.fs
         .writeFile(filePath, base64, 'base64')
-        .then(res => {
+        .then((res) => {
           ToastAndroid.show(
             'Receipt has been downloaded successfully',
-            ToastAndroid.SHORT,
+            ToastAndroid.SHORT
           );
         })
-        .catch(e => {
+        .catch((e) => {
           ToastAndroid.show('Some error occurred', ToastAndroid.SHORT);
         });
     } else if (url) {
@@ -90,7 +90,7 @@ export default function ReceiptPDFScreen({route}: {route: any}) {
           extraData.short_collection_receipt_url,
           extraData.loan_data.allocation_month,
           extraData.loan_data.applicant_name,
-          authData,
+          authData
         );
         let message = '';
         if (response?.success) {
@@ -105,12 +105,12 @@ export default function ReceiptPDFScreen({route}: {route: any}) {
 
   const RightActionComponent = useMemo(() => {
     const PrintButton = (
-      <TouchableOpacity onPress={() => RNPrint.print({filePath: url})}>
+      <TouchableOpacity onPress={() => RNPrint.print({ filePath: url })}>
         <Icon
           name="print"
           type="ionicon"
           color="white"
-          style={{marginHorizontal: RFPercentage(0.8)}}
+          style={{ marginHorizontal: RFPercentage(0.8) }}
         />
       </TouchableOpacity>
     );
@@ -121,7 +121,7 @@ export default function ReceiptPDFScreen({route}: {route: any}) {
           name="ios-download"
           type="ionicon"
           color="white"
-          style={{marginHorizontal: RFPercentage(0.8)}}
+          style={{ marginHorizontal: RFPercentage(0.8) }}
         />
       </TouchableOpacity>
     );
@@ -151,13 +151,13 @@ export default function ReceiptPDFScreen({route}: {route: any}) {
         rightActionComponent={RightActionComponent}
       />
       <View style={styles.container}>
-        <Pdf source={source} style={styles.pdf} />
+        <Pdf trustAllCerts={false} source={source} style={styles.pdf} />
         {extraData.type === 'TASK' && isInternetAvailable ? (
           <FAB
             onPress={handleSendReceipt}
             color="#3E7BFA"
             style={styles.fabStyle}
-            icon={{name: 'send', color: 'white'}}
+            icon={{ name: 'send', color: 'white' }}
           />
         ) : null}
       </View>
