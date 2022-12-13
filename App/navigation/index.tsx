@@ -32,6 +32,7 @@ import { selectCloseVisit } from '../redux/offlineVisitDataSlice';
 import { selectLoanDetailOffline } from '../redux/loanDetailSlice';
 import { CompanyType } from '../../enums';
 import useConfig from '../hooks/useConfig';
+import RNBootSplash from 'react-native-bootsplash';
 
 export default function Navigation({
     colorScheme
@@ -143,6 +144,7 @@ export default function Navigation({
             ref={navigation}
             onReady={() => {
                 routingInstrumentation.registerNavigationContainer(navigation);
+                RNBootSplash.hide({ fade: true });
             }}
             theme={colorScheme === 'dark' ? DarkTheme : DefaultTheme}
         >

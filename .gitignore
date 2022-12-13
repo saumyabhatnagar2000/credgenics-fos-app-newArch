@@ -62,3 +62,13 @@ buck-out/
 # Ruby / CocoaPods
 /ios/Pods/
 /vendor/bundle/
+
+
+android/app/release/app-release.apk
+android/app/release/output-metadata.json
+android/app/staging/release/app-staging-release.apk
+android/app/staging/release/output-metadata.json
+android/app/dev/release/app-dev-release.apk
+android/app/dev/release/output-metadata.json
+android/app/uat/release/app-uat-release.apk
+android/app/uat/release/output-metadata.json`
