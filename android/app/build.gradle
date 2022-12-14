@@ -83,10 +83,12 @@ project.ext.react = [
 ]
 
 apply from: "../../node_modules/react-native/react.gradle"
+apply from: "../../node_modules/react-native-code-push/android/codepush.gradle"
+
+
 apply from: "../../node_modules/react-native-vector-icons/fonts.gradle"
 
 
-apply from: "../../node_modules/react-native-code-push/android/codepush.gradle"
 
 
 /**
@@ -154,6 +156,8 @@ android {
         versionCode 1
         versionName project.ext.versionName
         buildConfigField "boolean", "IS_NEW_ARCHITECTURE_ENABLED", isNewArchitectureEnabled().toString()
+        //Codepush bundle check error fix
+        resValue 'string', "CODE_PUSH_APK_BUILD_TIME", String.format("\"%d\"", System.currentTimeMillis())
 
         if (isNewArchitectureEnabled()) {
             // We configure the CMake build only if you decide to opt-in for the New Architecture.

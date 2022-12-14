@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { View, StyleSheet, Modal, Dimensions, StatusBar } from 'react-native';
+import { View, StyleSheet, Image } from 'react-native';
 
 import useColorScheme from './App/hooks/useColorScheme';
 import Navigation from './App/navigation';
 import { AuthProvider } from './App/contexts/Auth';
-import { Portal, Provider as PaperProvider } from 'react-native-paper';
+import { Provider as PaperProvider } from 'react-native-paper';
 import { ActionProvider } from './App/contexts/ActionContext';
 import { TaskProvider } from './App/contexts/TaskContext';
 import CodePush from 'react-native-code-push';
@@ -30,7 +30,8 @@ import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 import { persistor, store } from './App/redux/store';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import { BLUE_DARK } from './App/constants/Colors';
+
+const logoImage = require('./assets/images/cg-collect-logo.png');
 
 function App() {
     const [isDeviceVerifyLoading, isDeviceVerified] = useDeviceVerification();
@@ -104,32 +105,37 @@ function App() {
             );
         } else if (showIsUpdatedModal) {
             return (
-                <View>
-                    <Modal visible={showIsUpdatedModal} transparent>
-                        <View style={styles.containerStyle}>
-                            <Typography
-                                variant={TypographyVariants.body}
-                                style={{
-                                    fontFamily: TypographyFontFamily.heavy,
-                                    marginBottom: RFPercentage(1)
-                                }}
-                            >
-                                Update in Progress
-                            </Typography>
-                            <Typography
-                                style={styles.modalText}
-                                variant={TypographyVariants.caption}
-                            >
-                                {` Please do not close the app during\n the update.`}
-                            </Typography>
-                            <ProgressBar
-                                title="Bytes"
-                                progress={bytesDownloaded}
-                                total={totalBytesDown}
-                                showPercentage
-                            />
-                        </View>
-                    </Modal>
+                <View style={styles.updateScreenContainer}>
+                    <View>
+                        <Image
+                            resizeMode="contain"
+                            style={styles.logoStyle}
+                            source={logoImage}
+                        />
+                    </View>
+                    <View style={styles.containerStyle}>
+                        <Typography
+                            variant={TypographyVariants.body}
+                            style={{
+                                fontFamily: TypographyFontFamily.heavy,
+                                marginBottom: RFPercentage(1)
+                            }}
+                        >
+                            Update in Progress
+                        </Typography>
+                        <Typography
+                            style={styles.modalText}
+                            variant={TypographyVariants.caption}
+                        >
+                            {` Please do not close the app during\n the update.`}
+                        </Typography>
+                        <ProgressBar
+                            title="Bytes"
+                            progress={bytesDownloaded}
+                            total={totalBytesDown}
+                            showPercentage
+                        />
+                    </View>
                 </View>
             );
         }
@@ -194,12 +200,22 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         paddingVertical: RFPercentage(3),
         paddingHorizontal: RFPercentage(2),
-        marginTop: Dimensions.get('screen').height - RFPercentage(31)
+        marginBottom: RFPercentage(7)
     },
     modalText: {
         textAlign: 'center',
         lineHeight: RFPercentage(2),
         marginBottom: RFPercentage(1)
+    },
+    updateScreenContainer: {
+        flex: 1,
+        justifyContent: 'space-between',
+        alignItems: 'center'
+    },
+    logoStyle: {
+        marginTop: RFPercentage(33),
+        height: 200,
+        width: 200
     }
 });
 
