@@ -219,6 +219,22 @@ android {
         }
     }
 
+    flavorDimensions "default"
+        productFlavors {
+            dev {
+                applicationId 'com.credgenics.fos.dev'
+            }
+            prod {
+                applicationId 'com.credgenics.fos'
+            }
+            staging {
+                applicationId 'com.credgenics.fos.staging'
+            }
+            uat {
+                applicationId 'com.credgenics.fos.uat'
+            }
+        }
+
     splits {
         abi {
             reset()

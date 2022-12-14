@@ -1,13 +1,12 @@
 {
-    "ENV": "production",
-    "BASE_URL": "https://apiprod.credgenics.com",
-    "BASE_URL_IDN": "https://apiidn.credgenics.com",
+    "ENV": "development",
+    "BASE_URL": "https://p3-api.dev.credgenics.com",
     "CODEPUSH": {
         "deploymentKey": {
-            "android": "ja0oFwRkaDBhzE94Cn-nZ8EyVqaZ3EbkD02sA",
+            "android": "RVx7cD_JBqbyg7ilOprl5xu6RW1iaTgLgZtq2",
             "ios": ""
         }
     },
-    "REFERER": "https://app.credgenics.com/",
-    "AUTH_PUBLIC_KEY": "-----BEGIN PUBLIC KEY-----\nMIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEAhFpmp+9uoA2Dp1kcYvhm\nJmlmbBfcIzlMhnvpLSCyWmMpVRFx9R8VLQh5Do5kfAiIDtKfD68TIgsfOzS1BahF\nRTDv8OMgePFJhTUJI/0KJrv2Pbi3KgJviMJ2DFP4XeW+YSE12Rsr4BB9cvJYM7DX\nsp4Mk/xLAgd36sQGVs8mzguiDHswZ7B0rM89PNhkwWJK39O5K8H+b+zUtsSyW9uR\nxcHjxI6afgS9u3b2iCvG9q5r/Gs3zVdQnGQQVFxuaLasQsC1sYTKr25F/IkrTgmb\nlAURr8Umn2rpq7iz0cjwGmaB4yH6ks41kB5fFu/Qiz2QdEClzMIhKZnkFN5iy3yy\nzwDszNdAQUU/JyHvOqdxm25LLz7idlhe05r1Mm/qfzG25I/ECLOwDZBsoki3IYvy\nLubke7B55qpqfHi+wm2Ebe+TjsqGqePkNtmS1nl62/Ql1+edZgwyYI+WKP3t4YzM\n8Z4RgW+GlFhnG1QRSxihvvC+ZT/dff2IatwEOyoVGgicR6gqR0IKxuPjJgkFhphl\nfZ/aGkQNYJ7dgoSGzSfXJK7qyN6pyJE4dHcs/JWvR1nEzxiIr8kt/CMO9wo9HK8b\nI2o++n5pOyYbewtdekPwdzSzR/EAx4KXbnPLtNNWsdZGpxX0jKXsA1oczUt2pBmZ\nhi8ShObonQokELptbg48wgMCAwEAAQ==\n-----END PUBLIC KEY-----"
+    "REFERER": "https://p3.dev.credgenics.com/",
+    "AUTH_PUBLIC_KEY": "-----BEGIN PUBLIC KEY-----\nMIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEAjbLiwY2+XspERK+F9/W6\nQrSaHOSN6lx3F1Qx+LFTStnciET7bQEhlH3EQvYD2IYreWD18i86G+46f/ASKF4D\nO0fjV/f/5RJoA2C+9HKXeUC78KU93ElxahwMdUhmD+jozEBouAQYIYA3HmYkvAhP\naHKYH+7CDWONkKNv7beTApuS9L0lX6ZeFIOnzJ9eXpmAyHpKHcWIV4OvBpeiqDv/\nbVrBQ1cRI07UoYIdsocgfpTrbu7nIxVCbIkIy97P330FYfHtKWGejuSvgvDnN3Od\nig/rNbpMEQaScH2aDSDrPgmAkP5pSkYD7G4R4/oSygGePQA6Fp7LddC/RRqRPN2q\nYBWVt7qvbnZulQRK2zGQjAcbrR4xFGpKn8wdYUXo9LgxPHYr3p6OGkpMxnp7VlWp\n1DxL1eIMscQHk8uXqLbzCNUiCjpGO3eP1iC5YETfgcJq8YQuDRf3tD+XKJTyIxke\nbVJOudo/iHKSGtd3GQQoS7qIgTX9teomxdBYxhBg8FiIIZ3UoF/s+D0znoE29LVv\nzIZdgN7ezRGKQF/dYo9264AiF7fQOeNh83KRJAeguXFoN0OAmmifdh16YjdQUSwG\nsVfFjRgQB/bbaNXsNwia2EFRVPAL9orfxfdeJsZgoB1AD74kXJ3wlzwSNc07waNd\n2DQ9hxdQKjVureN9cY9bKPUCAwEAAQ==\n-----END PUBLIC KEY-----"
 }
