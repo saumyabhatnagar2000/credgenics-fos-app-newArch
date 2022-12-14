@@ -42,6 +42,7 @@
         "@types/uuid": "^8.3.4",
         "axios": "^1.2.0",
         "babel-plugin-module-resolver": "^4.1.0",
+        "babel-plugin-transform-remove-console": "^6.9.4",
         "compare-versions": "^4.0.1",
         "eslint-plugin-ft-flow": "^2.0.1",
         "eslint-plugin-unused-imports": "^2.0.0",
