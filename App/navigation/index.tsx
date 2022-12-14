@@ -31,6 +31,7 @@ import { useAppSelector } from '../redux/hooks';
 import { selectCloseVisit } from '../redux/offlineVisitDataSlice';
 import { selectLoanDetailOffline } from '../redux/loanDetailSlice';
 import { CompanyType } from '../../enums';
+import _ from 'lodash';
 import useConfig from '../hooks/useConfig';
 import RNBootSplash from 'react-native-bootsplash';
 
@@ -90,11 +91,20 @@ export default function Navigation({
         []
     );
 
+    const changeConnection = React.useCallback(
+        _.throttle((state) => {
+            setIsInternetAvaiable(
+                state.isInternetReachable && state.isConnected
+            );
+            setIsConnnected(state.isInternetReachable && state.isConnected);
+        }, 4000),
+        [setIsInternetAvaiable, setIsConnnected]
+    );
+
     React.useEffect(() => {
         // Subscribe
         const unsubscribe = NetInfo.addEventListener((state) => {
-            setIsInternetAvaiable(!!state.isConnected);
-            setIsConnnected(!!state.isConnected);
+            changeConnection(state);
         });
         // Unsubscribe
         return () => unsubscribe();

@@ -13,11 +13,10 @@
         "prettier:write": "npx prettier -- --write App/**/*.{js,jsx,ts,tsx,json} && npx prettier -- --write *.{js,jsx,ts,tsx,json}",
         "precommit": "lint-staged",
         "custom-release": "appcenter codepush release-react -a credgenics/credgenics-fos-app -d production --sourcemap-output --output-dir ./build -t 2.0.0 && sentry-cli react-native appcenter --deployment development --version-name 2.0.0 credgenics/credgenics-fos-app android './build/CodePush' --dist v86 --org credgenics --project cg-collect --bundle-id com.credgenics.fos",
-        "app-build": "npx jetify && npx react-native run-android --active-arch-only",
-        "dev-debug": "react-native run-android --variant=devDebug --appIdSuffix=dev",
-        "staging-debug": "react-native run-android --variant=stagingDebug --appIdSuffix=staging",
-        "uat-debug": "react-native run-android --variant=uatDebug --appIdSuffix=uat",
-        "prod-debug": "react-native run-android --variant=prodDebug --appIdSuffix=prod"
+        "dev-debug": "npx jetify && react-native run-android --variant=devDebug --appIdSuffix=dev --active-arch-only",
+        "staging-debug": "npx jetify && react-native run-android --variant=stagingDebug --appIdSuffix=staging --active-arch-only",
+        "uat-debug": "npx jetify && react-native run-android --variant=uatDebug --appIdSuffix=uat --active-arch-only",
+        "prod-debug": "npx jetify && react-native run-android --variant=prodDebug --appIdSuffix=prod --active-arch-only"
     },
     "dependencies": {
         "@gorhom/bottom-sheet": "^4",

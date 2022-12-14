@@ -163,6 +163,7 @@ const AuthProvider: React.FC = ({ children }) => {
     const getOrgDetails = async () => {
         try {
             const data: OrganisationDetails = await fetchOrgDetails(authData);
+            if (!data) return;
             if (data) {
                 const {
                     fos_collection_mode = '',
@@ -225,7 +226,6 @@ const AuthProvider: React.FC = ({ children }) => {
                 );
                 setOnlineCollectionMode(online_collection_mode);
                 setChequeDetailsInput(cheque_details_input);
-                setOfflineMode(offline_mode);
 
                 if (
                     Object.keys(CurrencyTypes).includes(
@@ -275,7 +275,7 @@ const AuthProvider: React.FC = ({ children }) => {
                 setCountry(fetchedCountry as CountryCodes);
             }
         } catch (e) {
-            console.log(e, 'error here');
+            //
         }
     };
 
