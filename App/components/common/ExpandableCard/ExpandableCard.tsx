@@ -297,33 +297,36 @@ export default function ExpandableCard(config: ExpandableCardType) {
                         onPress={toggleExpand}
                     >
                         <View style={styles.firstContentWrapper}>
-                            {config.type === 'visit' && !checkCardExpanded() && (
-                                <View style={styles.heading}>
-                                    <Typography
-                                        variant={TypographyVariants.body3}
-                                        style={styles.totalAmountLabel}
-                                    >
-                                        {'Total Amount'}
-                                    </Typography>
-                                    <Typography
-                                        variant={TypographyVariants.body3}
-                                        style={[
-                                            styles.separatorColon,
-                                            { flex: 1 }
-                                        ]}
-                                    >
-                                        {':'}
-                                    </Typography>
-                                    <CurrencyTypography
-                                        amount={headerData?.amount_recovered}
-                                        style={{
-                                            flex: 10,
-                                            paddingHorizontal: '1%'
-                                        }}
-                                        variant={TypographyVariants.body4}
-                                    />
-                                </View>
-                            )}
+                            {config.type === 'visit' &&
+                                !checkCardExpanded() && (
+                                    <View style={styles.heading}>
+                                        <Typography
+                                            variant={TypographyVariants.body3}
+                                            style={styles.totalAmountLabel}
+                                        >
+                                            {'Total Amount'}
+                                        </Typography>
+                                        <Typography
+                                            variant={TypographyVariants.body3}
+                                            style={[
+                                                styles.separatorColon,
+                                                { flex: 1 }
+                                            ]}
+                                        >
+                                            {':'}
+                                        </Typography>
+                                        <CurrencyTypography
+                                            amount={
+                                                headerData?.amount_recovered
+                                            }
+                                            style={{
+                                                flex: 10,
+                                                paddingHorizontal: '1%'
+                                            }}
+                                            variant={TypographyVariants.body4}
+                                        />
+                                    </View>
+                                )}
                             {config.type == 'call' && (
                                 <View style={styles.call}>
                                     {Object.keys(headerData).map((d, i) => (

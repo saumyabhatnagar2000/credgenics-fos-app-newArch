@@ -10,7 +10,7 @@
         "postinstall": "patch-package",
         "test": "jest",
         "lint": "tsc --noEmit && eslint --ext .js,.jsx,.ts,.tsx ./",
-        "prettier:write": "npx prettier -- --write App/**/*.{js,jsx,ts,tsx,json} && npx prettier -- --write *.{js,jsx,ts,tsx,json}",
+        "prettier:write": "npx prettier --write \"./**/*.{js,jsx,json,ts,tsx}\"",
         "precommit": "lint-staged",
         "custom-release": "appcenter codepush release-react -a credgenics/credgenics-fos-app -d production --sourcemap-output --output-dir ./build -t 2.0.0 && sentry-cli react-native appcenter --deployment development --version-name 2.0.0 credgenics/credgenics-fos-app android './build/CodePush' --dist v86 --org credgenics --project cg-collect --bundle-id com.credgenics.fos",
         "dev-debug": "npx jetify && react-native run-android --variant=devDebug --appIdSuffix=dev --active-arch-only",
