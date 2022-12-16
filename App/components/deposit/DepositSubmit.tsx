@@ -4,13 +4,13 @@ import React, {
   useEffect,
   useMemo,
   useRef,
-  useState,
+  useState
 } from 'react';
-import {ScrollView} from 'react-native-gesture-handler';
-import {StyleSheet, ToastAndroid} from 'react-native';
+import { ScrollView } from 'react-native-gesture-handler';
+import { StyleSheet, ToastAndroid } from 'react-native';
 import ProofSelectorContainer from '../common/ProofSelector/ProofSelector';
-import {View} from 'react-native';
-import {Button} from '@rneui/base';
+import { View } from 'react-native';
+import { Button } from '@rneui/base';
 import {
   BranchRepresentativeType,
   DepositBranchType,
@@ -21,36 +21,36 @@ import {
   MakeDepositType,
   PendingDepositType,
   TaskBottomSheetData,
-  VisitOtpDataType,
+  VisitOtpDataType
 } from '../../../types';
 import {
   getBranchDetails,
   getBranchRepresentatives,
   makeDepsoit,
-  updateDepositId,
+  updateDepositId
 } from '../../services/depositService';
-import {useAuth} from '../../hooks/useAuth';
+import { useAuth } from '../../hooks/useAuth';
 import LoanAccountsView from './LoanAccounts';
-import {useTaskAction} from '../../hooks/useTaskAction';
+import { useTaskAction } from '../../hooks/useTaskAction';
 import {
   StringCompare,
   capitalizeFirstLetter,
   checkProofAttached,
   generateArrayfromString,
   leadingDebounce,
-  showToast,
+  showToast
 } from '../../services/utils';
-import {ProgressDialog} from '../common/Dialogs/ProgessDialog';
+import { ProgressDialog } from '../common/Dialogs/ProgessDialog';
 import ResultModal from '../modals/ResultModal';
-import {useNavigation} from '@react-navigation/core';
-import {RFPercentage} from 'react-native-responsive-fontsize';
+import { useNavigation } from '@react-navigation/core';
+import { RFPercentage } from 'react-native-responsive-fontsize';
 import DashedLine from 'react-native-dashed-line';
 import InputWithLabel from '../common/InputWithLabel';
 import Typography, {
   TypographyFontFamily,
-  TypographyVariants,
+  TypographyVariants
 } from '../ui/Typography';
-import Colors, {BLUE_DARK, GREY_2} from '../../constants/Colors';
+import Colors, { BLUE_DARK, GREY_2 } from '../../constants/Colors';
 import CurrencyTypography from '../ui/CurrencyTypography';
 import {
   DEPOSIT_SMS_TEMPLATE_ID,
@@ -59,33 +59,33 @@ import {
   SMS_PRINCIPAL_ENTITY_ID,
   SOMETHING_WENT_WRONG,
   get_deposit_otp_body,
-  otp_max_try_error_string,
+  otp_max_try_error_string
 } from '../../constants/constants';
 import {
   BankBranchType,
   DepositTypes,
   ExpandableCardTypes,
   OtpVerifyTypes,
-  ToastTypes,
+  ToastTypes
 } from '../../../enums';
-import {TaskBottomSheet} from '../tasks/TaskBottomSheet';
+import { TaskBottomSheet } from '../tasks/TaskBottomSheet';
 import BottomSheet from '@gorhom/bottom-sheet';
 import moment from 'moment';
-import {generateVisitOtp} from '../../services/taskService';
-import {v4 as uuid} from 'uuid';
-import {CustomDropDown} from '../common/DropDown';
-import {useFocusEffect} from '@react-navigation/native';
-import {BankBranchIcon} from '../common/Icons/BankBranchIcon';
-import {CompanyBranchIcon} from '../common/Icons/CompanyBranchIcon';
+import { generateVisitOtp } from '../../services/taskService';
+import { v4 as uuid } from 'uuid';
+import { CustomDropDown } from '../common/DropDown';
+import { useFocusEffect } from '@react-navigation/native';
+import { BankBranchIcon } from '../common/Icons/BankBranchIcon';
+import { CompanyBranchIcon } from '../common/Icons/CompanyBranchIcon';
 import ExpandableCardHelpSection from '../common/ExpandableCard/ExpandableCardHelpSection';
-import {AirtelBranchIcon} from '../common/Icons/AirtelBranchIcon';
+import { AirtelBranchIcon } from '../common/Icons/AirtelBranchIcon';
 
 const getBranchRepresentativeObject = (
   value: string,
-  list: Array<BranchRepresentativeType>,
+  list: Array<BranchRepresentativeType>
 ): BranchRepresentativeType => {
   let dummyObject: any;
-  list.forEach(_item => {
+  list.forEach((_item) => {
     if (StringCompare(_item?.client_employee_id, value)) {
       dummyObject = _item;
     }
@@ -102,9 +102,9 @@ export default function DepositSubmit(depositConfigData: DepositSubmitType) {
     depositModes,
     depositBranchLocation,
     showCompanyBranchRepresentatives,
-    depositOtpVerificationMethod,
+    depositOtpVerificationMethod
   } = useAuth();
-  const {imageProvider, imageSetterProvider} = useTaskAction();
+  const { imageProvider, imageSetterProvider } = useTaskAction();
   const navigation = useNavigation();
   const [expanded, setExpanded] = React.useState<boolean>(true);
   const [depositMethod, setDepositMethod] = React.useState<string>('');
@@ -122,7 +122,7 @@ export default function DepositSubmit(depositConfigData: DepositSubmitType) {
   const [wasStatusAvailable, setWasStatusAvailable] = useState({});
   const [isBranchDetailsPresent, setIsBranchDetailsPresent] = useState({
     company: false,
-    bank: false,
+    bank: false
   });
   const otpBottomSheetRef = useRef<BottomSheet>(null);
   const [otpInput, setOtpInput] = useState(false);
@@ -131,7 +131,7 @@ export default function DepositSubmit(depositConfigData: DepositSubmitType) {
   const [mobilesArray, setMobilesArray] = useState<Array<string>>([]);
   const [bankBranch, setBankBranch] = useState<Array<DepositBranchType>>([]);
   const [companyBranch, setCompanyBranch] = useState<Array<DepositBranchType>>(
-    [],
+    []
   );
   const [branchRepDropDownOpen, setBranchRepDropDownOpen] = useState(false);
   const [depositMethodDropDownOpen, setDepositMethodDropDownOpen] =
@@ -159,17 +159,17 @@ export default function DepositSubmit(depositConfigData: DepositSubmitType) {
       if (value.trim() === BankBranchType.bank) {
         tempArr.push({
           title: value.trim(),
-          icon: <BankBranchIcon />,
+          icon: <BankBranchIcon />
         });
       } else if (value.trim() === BankBranchType.company) {
         tempArr.push({
           title: value.trim(),
-          icon: <CompanyBranchIcon />,
+          icon: <CompanyBranchIcon />
         });
       } else if (value.trim() === BankBranchType.airtel) {
         tempArr.push({
           title: value.trim(),
-          icon: <AirtelBranchIcon />,
+          icon: <AirtelBranchIcon />
         });
       }
     });
@@ -182,10 +182,10 @@ export default function DepositSubmit(depositConfigData: DepositSubmitType) {
     setSelectedBranchRepresentative(tempSelectedBranchRepresentative);
     if (tempSelectedBranchRepresentative) {
       setEmailsArray(
-        generateArrayfromString(tempSelectedBranchRepresentative?.email ?? ''),
+        generateArrayfromString(tempSelectedBranchRepresentative?.email ?? '')
       );
       setMobilesArray(
-        generateArrayfromString(tempSelectedBranchRepresentative?.mobile ?? ''),
+        generateArrayfromString(tempSelectedBranchRepresentative?.mobile ?? '')
       );
     }
   };
@@ -193,7 +193,7 @@ export default function DepositSubmit(depositConfigData: DepositSubmitType) {
   const bottomSheetData: TaskBottomSheetData = {
     contact_number: mobilesArray?.toString(),
     email_address: emailsArray?.toString(),
-    unique_id: getUniqueId,
+    unique_id: getUniqueId
   };
 
   useEffect(() => {
@@ -205,7 +205,7 @@ export default function DepositSubmit(depositConfigData: DepositSubmitType) {
         const apiResponse = await getBranchDetails(authData);
         tempDepositBranchDetails = apiResponse?.data?.data ?? [];
       } catch {}
-      tempDepositBranchDetails?.map(item => {
+      tempDepositBranchDetails?.map((item) => {
         if (item?.branch_type == BankBranchType.bank) {
           tempBankBranch.push(item);
         } else if (item?.branch_type == BankBranchType.company) {
@@ -213,16 +213,16 @@ export default function DepositSubmit(depositConfigData: DepositSubmitType) {
         }
       });
       if (tempCompanyBranch?.length) {
-        setIsBranchDetailsPresent(_prev => ({
+        setIsBranchDetailsPresent((_prev) => ({
           ..._prev,
-          ['company']: true,
+          ['company']: true
         }));
       }
 
       if (tempBankBranch?.length) {
-        setIsBranchDetailsPresent(_prev => ({
+        setIsBranchDetailsPresent((_prev) => ({
           ..._prev,
-          ['bank']: true,
+          ['bank']: true
         }));
       }
 
@@ -233,7 +233,7 @@ export default function DepositSubmit(depositConfigData: DepositSubmitType) {
 
   useEffect(() => {
     let obj: any = {};
-    depositConfigData.loan_ids.map(loan => {
+    depositConfigData.loan_ids.map((loan) => {
       obj[loan.visit_id] = loan.agent_marked_status ?? null;
     });
     setWasStatusAvailable(obj);
@@ -245,7 +245,7 @@ export default function DepositSubmit(depositConfigData: DepositSubmitType) {
         setBranchRepDropDownOpen(false);
         setDepositMethodDropDownOpen(false);
       };
-    }, [navigation]),
+    }, [navigation])
   );
 
   useEffect(() => {
@@ -253,7 +253,7 @@ export default function DepositSubmit(depositConfigData: DepositSubmitType) {
     depositModes?.forEach((item: DepositTypes) => {
       dummyDepositMethodData.push({
         label: item,
-        value: item,
+        value: item
       });
     });
     setDepositMethodsDropDown(dummyDepositMethodData);
@@ -271,7 +271,7 @@ export default function DepositSubmit(depositConfigData: DepositSubmitType) {
         try {
           const apiResponse = await getBranchRepresentatives(
             depositBranch?.branch_details?.branch_code,
-            authData,
+            authData
           );
           if (apiResponse) {
             let dummyBranchRepData: Array<DropDownType> = [];
@@ -279,7 +279,7 @@ export default function DepositSubmit(depositConfigData: DepositSubmitType) {
             apiResponse?.data.forEach((item: BranchRepresentativeType) => {
               dummyBranchRepData.push({
                 label: `${item.name} (${item.client_employee_id})`,
-                value: item.client_employee_id,
+                value: item.client_employee_id
               });
             });
             setBranchRepresentativesDropDown(dummyBranchRepData);
@@ -293,15 +293,15 @@ export default function DepositSubmit(depositConfigData: DepositSubmitType) {
     {
       title: 'Proof of Deposit',
       show: true,
-      imageTag: 'deposit',
-    },
+      imageTag: 'deposit'
+    }
   ];
 
   const onDepositSubmitInternal = async () => {
     if (StringCompare(allocationMonth, Overall)) {
       ToastAndroid.show(
         `Deposit cannot be submittded at ‘Overall’ allocation month, please select an individual month.`,
-        ToastAndroid.LONG,
+        ToastAndroid.LONG
       );
       return;
     }
@@ -318,7 +318,7 @@ export default function DepositSubmit(depositConfigData: DepositSubmitType) {
       otp_data: {
         destination: getUniqueId,
         otp_type: 'deposit',
-        otp: verificationOTP,
+        otp: verificationOTP
       },
       branch_manager_details: {
         branch_code: selectedBranchRepresentative?.branch_code ?? '',
@@ -328,8 +328,8 @@ export default function DepositSubmit(depositConfigData: DepositSubmitType) {
         email: selectedBranchRepresentative?.email ?? '',
         mobile: selectedBranchRepresentative?.mobile ?? '',
         department: selectedBranchRepresentative?.department ?? '',
-        manager_id: selectedBranchRepresentative?.manager_id ?? '',
-      },
+        manager_id: selectedBranchRepresentative?.manager_id ?? ''
+      }
     };
     if (depositBranch?.branch_type != BankBranchType.airtel) {
       const fileData = checkProofAttached(true, imageProvider('deposit'));
@@ -351,7 +351,7 @@ export default function DepositSubmit(depositConfigData: DepositSubmitType) {
         depositData,
         authData,
         linked_deposit_id,
-        depositOtpVerificationMethod,
+        depositOtpVerificationMethod
       );
       if (apiResponse) {
         const output = apiResponse?.message ?? '';
@@ -359,17 +359,17 @@ export default function DepositSubmit(depositConfigData: DepositSubmitType) {
           navigation.navigate('DepositTimerScreen', {
             depositAmount: depositConfigData.amount,
             depositData: depositConfigData.loan_ids,
-            depositId: apiResponse?.data?.deposit_id,
+            depositId: apiResponse?.data?.deposit_id
           });
           return;
         }
         updateDepositId(visitIds, apiResponse?.data?.deposit_id, authData)
-          .then(response => {
+          .then((response) => {
             setComment(output);
             setVisible(true);
             setButton(true);
           })
-          .catch(error => {
+          .catch((error) => {
             let message = SOMETHING_WENT_WRONG;
             if (error?.response) {
               message = error?.response?.data?.message;
@@ -390,7 +390,7 @@ export default function DepositSubmit(depositConfigData: DepositSubmitType) {
     const otpBodyString = get_deposit_otp_body(
       depositConfigData.amount,
       moment().format('DD-MM-YYYY, HH:MM:SS'),
-      authData?.name,
+      authData?.name
     );
     if (
       emailsArray.length == 0 &&
@@ -399,7 +399,7 @@ export default function DepositSubmit(depositConfigData: DepositSubmitType) {
     ) {
       ToastAndroid.show(
         'No Email Address and Mobile number found for OTP verification',
-        ToastAndroid.LONG,
+        ToastAndroid.LONG
       );
       return;
     }
@@ -413,17 +413,17 @@ export default function DepositSubmit(depositConfigData: DepositSubmitType) {
         email_data: {
           from_data: {
             name: 'Deposit Report',
-            email: 'info@credgenics.com',
+            email: 'info@credgenics.com'
           },
           subject: 'Deposit Verification OTP',
-          email_body: otpBodyString,
+          email_body: otpBodyString
         },
         sms_data: {
           sms_body: otpBodyString,
           content_template_id: DEPOSIT_SMS_TEMPLATE_ID,
-          principal_entity_id: SMS_PRINCIPAL_ENTITY_ID,
-        },
-      },
+          principal_entity_id: SMS_PRINCIPAL_ENTITY_ID
+        }
+      }
     };
     try {
       const apiResponse = await generateVisitOtp(VisitOtpData);
@@ -452,13 +452,13 @@ export default function DepositSubmit(depositConfigData: DepositSubmitType) {
         generateDepositOtp();
       } else onDepositSubmitInternal();
     }, 2000),
-    [generateDepositOtp, onDepositSubmitInternal],
+    [generateDepositOtp, onDepositSubmitInternal]
   );
   const enableSubmitButton = useCallback(() => {
     let loanDataStatus = true;
-    depositLoanData.forEach(item => {
+    depositLoanData.forEach((item) => {
       let loanStatusMatch = false;
-      LOAN_STATUS_TEXT.forEach(status => {
+      LOAN_STATUS_TEXT.forEach((status) => {
         if (
           status === item.agent_marked_status ||
           status === item.agent_marked_status
@@ -498,7 +498,7 @@ export default function DepositSubmit(depositConfigData: DepositSubmitType) {
     depositLoanData,
     depositMethod,
     depositOtpVerificationMethod,
-    imageProvider,
+    imageProvider
   ]);
 
   const showBranchRepDropdown = useMemo(() => {
@@ -528,11 +528,11 @@ export default function DepositSubmit(depositConfigData: DepositSubmitType) {
 
   useEffect(() => {
     let ids: Array<DepositSubmitIdType> = [];
-    depositConfigData.loan_ids.map(loan => {
+    depositConfigData.loan_ids.map((loan) => {
       ids.push({
         visit_id: loan.visit_id,
         loan_id: loan.loan_id,
-        allocation_month: loan.allocation_month,
+        allocation_month: loan.allocation_month
       });
     });
     setVisitIds([...ids]);
@@ -540,19 +540,19 @@ export default function DepositSubmit(depositConfigData: DepositSubmitType) {
     if (depositConfigData.redeposit) {
       if (depositConfigData.data?.deposit_method) {
         setDepositMethod(
-          capitalizeFirstLetter(depositConfigData.data?.deposit_method),
+          capitalizeFirstLetter(depositConfigData.data?.deposit_method)
         );
       }
       imageSetterProvider('deposit')({
         uri: depositConfigData.data?.deposit_proof_url,
-        type: 'link',
+        type: 'link'
       });
       setReceipt(depositConfigData.data?.deposit_receipt_no ?? '');
       setComment(depositConfigData.data?.comment ?? '');
       setDepositBranch({
         branch_details: depositConfigData.data?.branch_details,
         branch_id: depositConfigData.data?.branch_id!,
-        branch_type: depositConfigData.data?.branch_type,
+        branch_type: depositConfigData.data?.branch_type
       });
     } else {
       setDepositMethod(depositConfigData.recovery_method);
@@ -566,34 +566,34 @@ export default function DepositSubmit(depositConfigData: DepositSubmitType) {
     ) {
       showToast(
         'Contact your supervisor to add at least one Company details',
-        ToastTypes.long,
+        ToastTypes.long
       );
       return;
     }
     if (!isBranchDetailsPresent.bank && branchType == BankBranchType.bank) {
       showToast(
         'Contact your supervisor to add at least one Bank details',
-        ToastTypes.long,
+        ToastTypes.long
       );
       return;
     }
     navigation.navigate('DepositBranchScreen', {
       branchType: branchType,
       companyBranch,
-      bankBranch,
+      bankBranch
     });
   };
 
   const handleDepositLocationPress = (title: string) => {
     if (title === BankBranchType.airtel) {
-      setDepositBranch({['branch_type']: BankBranchType.airtel});
+      setDepositBranch({ ['branch_type']: BankBranchType.airtel });
     } else {
       handleBranchClick(title);
     }
   };
 
   const extraData = {
-    handlePress: handleDepositLocationPress,
+    handlePress: handleDepositLocationPress
   };
 
   return (
@@ -619,7 +619,8 @@ export default function DepositSubmit(depositConfigData: DepositSubmitType) {
             />
             <Typography
               variant={TypographyVariants.title1}
-              style={styles.header}>
+              style={styles.header}
+            >
               Total Deposit Amount
             </Typography>
           </View>
@@ -638,7 +639,8 @@ export default function DepositSubmit(depositConfigData: DepositSubmitType) {
             <View>
               <Typography
                 variant={TypographyVariants.title1}
-                style={styles.dropdownHeading}>
+                style={styles.dropdownHeading}
+              >
                 {depositLocation}
               </Typography>
             </View>
@@ -672,11 +674,11 @@ export default function DepositSubmit(depositConfigData: DepositSubmitType) {
                   if (value.length > 0) handleBranchRepresentativeChange(value);
                 }}
                 containerStyle={{
-                  paddingHorizontal: 0,
+                  paddingHorizontal: 0
                 }}
                 dropDownContainerStyle={styles.dropDownContainer}
                 listItemContainerStyle={{
-                  paddingVertical: RFPercentage(0.4),
+                  paddingVertical: RFPercentage(0.4)
                 }}
                 placeholderStyle={styles.placeHolderStyle}
                 placeholder="Branch Representative"
@@ -699,11 +701,11 @@ export default function DepositSubmit(depositConfigData: DepositSubmitType) {
               values={depositMethod}
               setValues={setDepositMethod}
               containerStyle={{
-                paddingHorizontal: 0,
+                paddingHorizontal: 0
               }}
               dropDownContainerStyle={styles.dropDownContainer}
               listItemContainerStyle={{
-                paddingVertical: RFPercentage(0.4),
+                paddingVertical: RFPercentage(0.4)
               }}
               placeholderStyle={styles.placeHolderStyleDeposit}
               placeholder={depositMethod}
@@ -746,7 +748,7 @@ export default function DepositSubmit(depositConfigData: DepositSubmitType) {
             buttonStyle={styles.buttonStyle}
             titleStyle={styles.buttonText}
             disabledStyle={{
-              backgroundColor: '#E3E6E8',
+              backgroundColor: '#E3E6E8'
             }}
           />
         </View>
@@ -774,125 +776,125 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     borderWidth: 1,
     marginBottom: 20,
-    padding: 5,
+    padding: 5
   },
   buttonStyle: {
     backgroundColor: Colors.common.blue,
     borderRadius: 10,
-    marginBottom: RFPercentage(2),
+    marginBottom: RFPercentage(2)
   },
   buttonText: {
     color: Colors.light.background,
     fontFamily: 'AvenirLTProMedium',
-    fontSize: RFPercentage(2.5),
+    fontSize: RFPercentage(2.5)
   },
   changeText: {
-    color: '#055DE2',
+    color: '#055DE2'
   },
   checkboxContainer: {
     backgroundColor: 'white',
     borderColor: 'white',
     margin: 0,
     padding: 0,
-    width: 160,
+    width: 160
   },
   container: {
     backgroundColor: Colors.table.grey,
     flexGrow: 1,
-    paddingHorizontal: 20,
+    paddingHorizontal: 20
   },
   containerLoan: {
     backgroundColor: Colors.table.grey,
     marginVertical: RFPercentage(1.2),
-    padding: 2,
+    padding: 2
   },
   content: {
-    textAlign: 'center',
+    textAlign: 'center'
   },
   depositBranchText: {
     color: BLUE_DARK,
     fontFamily: TypographyFontFamily.heavy,
     fontSize: RFPercentage(2),
-    textTransform: 'capitalize',
+    textTransform: 'capitalize'
   },
   depositBranchTextGrey: {
     color: GREY_2,
     fontFamily: TypographyFontFamily.heavy,
     fontSize: RFPercentage(2),
-    textTransform: 'capitalize',
+    textTransform: 'capitalize'
   },
   depositMethodContainer: {
-    marginVertical: RFPercentage(2),
+    marginVertical: RFPercentage(2)
   },
   dropDownContainer: {
     elevation: 10,
-    marginHorizontal: 0,
+    marginHorizontal: 0
   },
   dropdownHeading: {
-    padding: RFPercentage(1),
+    padding: RFPercentage(1)
   },
   dropdownStyle: {
     backgroundColor: '#fff',
     borderRadius: 4,
     elevation: 2,
     marginVertical: RFPercentage(1.2),
-    paddingVertical: 2,
+    paddingVertical: 2
   },
   header: {
     color: '#909195',
-    textAlign: 'center',
+    textAlign: 'center'
   },
   innerDropdownStyle: {
     backgroundColor: '#fff',
     margin: 0,
-    padding: 0,
+    padding: 0
   },
   itemContainer: {
     backgroundColor: '#fff',
     borderRadius: 8,
-    padding: 0,
+    padding: 0
   },
   key: {
     color: 'black',
     flex: 7,
-    fontFamily: 'poppins',
+    fontFamily: 'poppins'
   },
   labelStyle: {
     fontFamily: TypographyFontFamily.heavy,
     fontSize: RFPercentage(1.6),
     marginHorizontal: RFPercentage(0.5),
-    marginVertical: RFPercentage(0.5),
+    marginVertical: RFPercentage(0.5)
   },
   paymentContainer: {
     alignItems: 'center',
     backgroundColor: Colors.table.grey,
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginVertical: 20,
+    marginVertical: 20
   },
   paymentText: {
     color: '#393F44',
-    marginRight: 5,
+    marginRight: 5
   },
   placeHolderStyle: {
     color: '#8899A8',
-    fontFamily: TypographyFontFamily.medium,
+    fontFamily: TypographyFontFamily.medium
   },
   placeHolderStyleDeposit: {
     color: BLUE_DARK,
-    fontFamily: TypographyFontFamily.medium,
+    fontFamily: TypographyFontFamily.medium
   },
   receiptNumberContainer: {
     marginHorizontal: -10,
-    marginTop: RFPercentage(2),
+    marginTop: RFPercentage(2)
   },
   row: {
     alignItems: 'center',
     flexDirection: 'row',
-    justifyContent: 'center',
+    justifyContent: 'center'
   },
   value: {
     flex: 5,
-    fontFamily: 'poppins',
-  },
+    fontFamily: 'poppins'
+  }
 });

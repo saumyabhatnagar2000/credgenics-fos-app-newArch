@@ -1,5 +1,4 @@
-import React, { useEffect } from 'react';
-import { BackHandler } from 'react-native';
+import React from 'react';
 import { MOCK_LOCATION_ENABLED } from '../../../constants/constants';
 import { SimpleAlertDialog } from './SimplerAlertDialog';
 import { KillAppProcess } from '../../../services/utils';

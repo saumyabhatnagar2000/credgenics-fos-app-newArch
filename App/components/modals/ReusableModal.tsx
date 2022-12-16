@@ -1,16 +1,16 @@
 import React from 'react';
-import {Modal, Portal} from 'react-native-paper';
-import {ModalButtonType} from '../../../types';
-import {StyleSheet, View} from 'react-native';
-import {RFPercentage} from 'react-native-responsive-fontsize';
-import {TypographyFontFamily} from '../ui/Typography';
-import {Button} from '@rneui/base';
+import { Modal, Portal } from 'react-native-paper';
+import { ModalButtonType } from '../../../types';
+import { StyleSheet, View } from 'react-native';
+import { RFPercentage } from 'react-native-responsive-fontsize';
+import { TypographyFontFamily } from '../ui/Typography';
+import { Button } from '@rneui/base';
 
 export const CustomModal = ({
   visible,
   data,
   HeaderComponent,
-  dismissable,
+  dismissable
 }: {
   visible: boolean;
   dismissable: boolean;
@@ -23,13 +23,13 @@ export const CustomModal = ({
         <View style={styles.containerStyle}>
           <HeaderComponent />
           <View style={styles.buttonContainer}>
-            {data.map(item => {
+            {data.map((item) => {
               return (
                 <Button
                   title={item.buttonText}
                   onPress={item.buttonFunction}
                   titleStyle={item.buttonTextStyle}
-                  containerStyle={item.buttonStyle}
+                  buttonStyle={item.buttonStyle}
                 />
               );
             })}
@@ -45,7 +45,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flexDirection: 'row',
     justifyContent: 'center',
-    marginVertical: RFPercentage(0.5),
+    marginVertical: RFPercentage(0.5)
   },
   containerStyle: {
     alignItems: 'center',
@@ -55,12 +55,12 @@ const styles = StyleSheet.create({
     height: '50%',
     justifyContent: 'space-evenly',
     paddingHorizontal: RFPercentage(2),
-    width: '80%',
+    width: '80%'
   },
   headerText: {
     fontFamily: TypographyFontFamily.medium,
     fontSize: RFPercentage(2.3),
     lineHeight: RFPercentage(3.5),
-    textAlign: 'center',
-  },
+    textAlign: 'center'
+  }
 });

@@ -1,14 +1,17 @@
 import * as React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { SvgXml } from 'react-native-svg';
+import Typography, { TypographyVariants } from '../components/ui/Typography';
 
 export default function NoInternetScreen() {
-    return (
-        <View style={styles.container}>
-            <SvgXml xml={noInternetConnection} />
-            <Text style={styles.title}>No Internet Connection!</Text>
-        </View>
-    );
+  return (
+    <View style={styles.container}>
+      <SvgXml xml={noInternetConnection} />
+      <Typography variant={TypographyVariants.body3} style={styles.title}>
+        No Internet Connection!
+      </Typography>
+    </View>
+  );
 }
 
 const noInternetConnection = `<svg width="190" height="170" viewBox="0 0 190 170" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -21,24 +24,25 @@ const noInternetConnection = `<svg width="190" height="170" viewBox="0 0 190 170
 `;
 
 const styles = StyleSheet.create({
-    container: {
-        alignItems: 'center',
-        backgroundColor: '#fff',
-        flex: 1,
-        justifyContent: 'center',
-        padding: 20
-    },
-    link: {
-        marginTop: 15,
-        paddingVertical: 15
-    },
-    linkText: {
-        color: '#2e78b7',
-        fontSize: 14
-    },
-    title: {
-        fontSize: 20,
-        fontWeight: 'bold',
-        padding: 40
-    }
+  container: {
+    alignItems: 'center',
+    backgroundColor: '#fff',
+    flex: 1,
+    justifyContent: 'center',
+    padding: 20
+  },
+  link: {
+    marginTop: 15,
+    paddingVertical: 15
+  },
+  linkText: {
+    color: '#2e78b7',
+    fontSize: 14
+  },
+  title: {
+    fontSize: 20,
+    // fontWeight: 'bold',
+    padding: 40,
+    color: '#000'
+  }
 });

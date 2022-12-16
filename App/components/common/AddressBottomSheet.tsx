@@ -1,39 +1,39 @@
-import React, {useCallback, useMemo, useState} from 'react';
-import {StyleSheet, ToastAndroid, TouchableOpacity, View} from 'react-native';
+import React, { useCallback, useMemo, useState } from 'react';
+import { StyleSheet, ToastAndroid, TouchableOpacity, View } from 'react-native';
 import BottomSheet, {
   BottomSheetBackdrop,
-  BottomSheetScrollView,
+  BottomSheetScrollView
 } from '@gorhom/bottom-sheet';
 import Typography, {
   TypographyFontFamily,
-  TypographyVariants,
+  TypographyVariants
 } from '../ui/Typography';
-import {RFPercentage} from 'react-native-responsive-fontsize';
-import {Portal} from 'react-native-paper';
-import {BottomSheetHandle} from './Icons/BottomSheetHandle';
-import {AddIcon} from './Icons/AddIcon';
+import { RFPercentage } from 'react-native-responsive-fontsize';
+import { Portal } from 'react-native-paper';
+import { BottomSheetHandle } from './Icons/BottomSheetHandle';
+import { AddIcon } from './Icons/AddIcon';
 import DashedLine from 'react-native-dashed-line';
-import {useNavigation, useRoute} from '@react-navigation/native';
-import {HomeIcon, OtherIcon, WorkIcon} from './Icons/AddressIcons';
-import {Button} from '@rneui/base';
-import {ScrollView} from 'react-native-gesture-handler';
+import { useNavigation, useRoute } from '@react-navigation/native';
+import { HomeIcon, OtherIcon, WorkIcon } from './Icons/AddressIcons';
+import { Button } from '@rneui/base';
+import { ScrollView } from 'react-native-gesture-handler';
 import {
   addressToCoordinateApiCall,
-  makePrimaryAddressApiCall,
+  makePrimaryAddressApiCall
 } from '../../services/addressService';
-import {useAuth} from '../../hooks/useAuth';
-import {ChevronDown} from './Icons/ChevronDown';
-import {ChevronUp} from './Icons/ChevronUp';
-import {convertIntoBase64, getAddress} from '../../services/utils';
-import {useTaskAction} from '../../hooks/useTaskAction';
-import {MapIcon} from './Icons/Map';
-import {startNavigation} from '../../services/utils';
-import {CustomActivityIndicator} from '../placeholders/CustomActivityIndicator';
-import {TaskDetailsEventTypes} from '../../constants/Events';
-import {useMixpanel} from '../../contexts/MixpanelContext';
+import { useAuth } from '../../hooks/useAuth';
+import { ChevronDown } from './Icons/ChevronDown';
+import { ChevronUp } from './Icons/ChevronUp';
+import { convertIntoBase64, getAddress } from '../../services/utils';
+import { useTaskAction } from '../../hooks/useTaskAction';
+import { MapIcon } from './Icons/Map';
+import { startNavigation } from '../../services/utils';
+import { CustomActivityIndicator } from '../placeholders/CustomActivityIndicator';
+import { TaskDetailsEventTypes } from '../../constants/Events';
+import { useMixpanel } from '../../contexts/MixpanelContext';
 import useCommon from '../../hooks/useCommon';
 import useLoanDetails from '../../hooks/useLoanData';
-import {getAddressDataKey} from '../../constants/Keys';
+import { getAddressDataKey } from '../../constants/Keys';
 import OnlineOnly from '../OnlineOnly';
 
 const getAddressIcon = (addressType?: string) => {
@@ -44,19 +44,19 @@ const getAddressIcon = (addressType?: string) => {
 };
 
 export const AddressBottomSheet = React.forwardRef((props: any, ref) => {
-  const {authData} = useAuth();
+  const { authData } = useAuth();
   let {
     data,
     applicantType,
     applicantIndex = -1,
     loanId,
     addressIndex,
-    loanData,
+    loanData
   } = props;
 
-  const {setUpdatedAddressIndex} = useTaskAction();
+  const { setUpdatedAddressIndex } = useTaskAction();
   const navigation = useNavigation();
-  const {logEvent} = useMixpanel();
+  const { logEvent } = useMixpanel();
   const route = useRoute();
   1;
   const {
@@ -64,9 +64,9 @@ export const AddressBottomSheet = React.forwardRef((props: any, ref) => {
     loanDetailMap,
     setLoanDetailMap,
     setLoanDetailsOfflineObj,
-    loanDetailOfflineObj,
+    loanDetailOfflineObj
   } = useLoanDetails();
-  const {isInternetAvailable} = useCommon();
+  const { isInternetAvailable } = useCommon();
   const SavedAddress = data?.other_addresses ?? [];
   const snapPoints = useMemo(() => ['70%'], []);
   const lastVisited = data?.last_location;
@@ -79,13 +79,13 @@ export const AddressBottomSheet = React.forwardRef((props: any, ref) => {
     }
   };
 
-  const renderBackdrop = useCallback(props => {
+  const renderBackdrop = useCallback((props) => {
     setFilteredData(SavedAddress.slice(0, 2));
     return <BottomSheetBackdrop disappearsOnIndex={-1} {...props} />;
   }, []);
 
   const [FilteredData, setFilteredData] = useState<Array<Object>>(
-    SavedAddress.slice(0, 2),
+    SavedAddress.slice(0, 2)
   );
 
   const [scrollable, setScrollable] = useState(false);
@@ -137,7 +137,7 @@ export const AddressBottomSheet = React.forwardRef((props: any, ref) => {
       loanId: loanId,
       addressIndex: addressIndex,
       applicantIndex: applicantIndex,
-      loanData,
+      loanData
     });
     ref?.current?.close();
   };
@@ -146,7 +146,7 @@ export const AddressBottomSheet = React.forwardRef((props: any, ref) => {
     if (selectedLoanData.allocation_month == 'Overall') {
       ToastAndroid.show(
         `Address cannot be made primary at ‘Overall’ allocation month, please select an individual month.`,
-        ToastAndroid.LONG,
+        ToastAndroid.LONG
       );
       return;
     }
@@ -156,40 +156,40 @@ export const AddressBottomSheet = React.forwardRef((props: any, ref) => {
       addressIndex: data?.address_id,
       loanId: loanId,
       addressType: data?.address_type,
-      applicantType: applicantType,
+      applicantType: applicantType
     };
     const addressToCoordinateData: any = {
       applicantIndex: applicantIndex,
       addressIndex: data?.address_id,
       loanId: loanId,
       address: `${data?.address_text},${data?.city}${data?.landmark} ,${data?.state} ${data?.pincode}`,
-      addressType: data?.address_type,
+      addressType: data?.address_type
     };
     if (data?.latitude && data?.longitude) {
       try {
         const apiResponse = await makePrimaryAddressApiCall(
           primaryApiData,
           selectedLoanData.allocation_month,
-          authData,
+          authData
         );
         if (apiResponse || !isInternetAvailable) {
           logEvent(TaskDetailsEventTypes.address_change, route.name, {
             success: true,
             value: {
-              message: apiResponse?.data?.message ?? '',
+              message: apiResponse?.data?.message ?? ''
             },
             old_address: {
-              address_index: addressIndex,
+              address_index: addressIndex
             },
             new_address: {
               address_index: data?.address_id,
               latitude: data?.latitude ?? 0,
-              longitude: data?.longitude ?? 0,
-            },
+              longitude: data?.longitude ?? 0
+            }
           });
           ToastAndroid.show(
             'Default Address Updated successfully',
-            ToastAndroid.SHORT,
+            ToastAndroid.SHORT
           );
           setUpdatedAddressIndex(data?.address_id);
 
@@ -199,14 +199,14 @@ export const AddressBottomSheet = React.forwardRef((props: any, ref) => {
             ];
           tempAddressData = {
             ...tempAddressData,
-            ['address_index']: data?.address_id,
+            ['address_index']: data?.address_id
           };
           setLoanDetailMap({
             [selectedLoanData.loan_id]: {
               ...loanDetailMap[selectedLoanData.loan_id],
               [getAddressDataKey(selectedLoanData.allocation_month)]:
-                tempAddressData,
-            },
+                tempAddressData
+            }
           });
           if (!isInternetAvailable) {
             setLoanDetailsOfflineObj({
@@ -215,10 +215,10 @@ export const AddressBottomSheet = React.forwardRef((props: any, ref) => {
                 addressData: {
                   ...data,
                   applicantIndex: applicantIndex,
-                  applicantType: applicantType,
+                  applicantType: applicantType
                 },
-                allocationMonth: selectedLoanData.allocation_month,
-              },
+                allocationMonth: selectedLoanData.allocation_month
+              }
             });
           }
         }
@@ -226,8 +226,8 @@ export const AddressBottomSheet = React.forwardRef((props: any, ref) => {
         logEvent(TaskDetailsEventTypes.address_change, route.name, {
           success: false,
           value: {
-            message: e?.response?.data ?? '',
-          },
+            message: e?.response?.data ?? ''
+          }
         });
         ToastAndroid.show('Some error Occurred', ToastAndroid.SHORT);
       }
@@ -238,13 +238,13 @@ export const AddressBottomSheet = React.forwardRef((props: any, ref) => {
             makePrimaryAddressApiCall(
               primaryApiData,
               selectedLoanData.allocation_month,
-              authData,
+              authData
             ),
             addressToCoordinateApiCall(
               addressToCoordinateData,
               applicantType,
-              authData,
-            ),
+              authData
+            )
           ]);
 
         if (
@@ -255,16 +255,16 @@ export const AddressBottomSheet = React.forwardRef((props: any, ref) => {
           logEvent(TaskDetailsEventTypes.address_change, route.name, {
             success: true,
             value: {
-              message: primaryApiResponse?.data?.message ?? '',
+              message: primaryApiResponse?.data?.message ?? ''
             },
             old_address: {
-              address_index: addressIndex,
+              address_index: addressIndex
             },
-            new_address: {address_index: data?.id},
+            new_address: { address_index: data?.id }
           });
           ToastAndroid.show(
             'Default Address Updated successfully',
-            ToastAndroid.SHORT,
+            ToastAndroid.SHORT
           );
           let tempAddressData =
             loanDetailMap[selectedLoanData.loan_id]?.[
@@ -272,14 +272,14 @@ export const AddressBottomSheet = React.forwardRef((props: any, ref) => {
             ];
           tempAddressData = {
             ...tempAddressData,
-            ['address_index']: data?.address_id,
+            ['address_index']: data?.address_id
           };
           setLoanDetailMap({
             [selectedLoanData.loan_id]: {
               ...loanDetailMap[selectedLoanData.loan_id],
               [getAddressDataKey(selectedLoanData.allocation_month)]:
-                tempAddressData,
-            },
+                tempAddressData
+            }
           });
           if (!isInternetAvailable) {
             setLoanDetailsOfflineObj({
@@ -288,10 +288,10 @@ export const AddressBottomSheet = React.forwardRef((props: any, ref) => {
                 addressData: {
                   ...data,
                   applicantIndex: applicantIndex,
-                  applicantType: applicantType,
+                  applicantType: applicantType
                 },
-                allocationMonth: selectedLoanData.allocation_month,
-              },
+                allocationMonth: selectedLoanData.allocation_month
+              }
             });
           }
         }
@@ -299,15 +299,15 @@ export const AddressBottomSheet = React.forwardRef((props: any, ref) => {
         logEvent(TaskDetailsEventTypes.address_change, route.name, {
           success: false,
           value: {
-            message: e?.response?.data ?? '',
-          },
+            message: e?.response?.data ?? ''
+          }
         });
         ToastAndroid.show('Some error Occurred', ToastAndroid.SHORT);
       }
       addressToCoordinateApiCall(
         addressToCoordinateData,
         applicantType,
-        authData,
+        authData
       );
     }
     setLoading(false);
@@ -324,7 +324,7 @@ export const AddressBottomSheet = React.forwardRef((props: any, ref) => {
   const SavedAddressRow = ({
     data,
     index,
-    type,
+    type
   }: {
     data: any;
     index: number;
@@ -337,27 +337,31 @@ export const AddressBottomSheet = React.forwardRef((props: any, ref) => {
         <View
           style={{
             marginHorizontal: RFPercentage(1),
-            flexDirection: 'row',
-          }}>
-          <View style={{flexDirection: 'row', flex: 8}}>
+            flexDirection: 'row'
+          }}
+        >
+          <View style={{ flexDirection: 'row', flex: 8 }}>
             <TouchableOpacity
               style={styles.addressCard}
               onPress={() =>
                 !(type == 'primary')
                   ? onClickAddress(convertedOtherAddress)
                   : null
-              }>
+              }
+            >
               <View style={styles.addressHeader}>
                 {getAddressIcon(convertedOtherAddress?.address_type)}
                 <Typography
                   variant={TypographyVariants.body1}
-                  style={{marginLeft: RFPercentage(0.7)}}>
+                  style={{ marginLeft: RFPercentage(0.7) }}
+                >
                   {convertedOtherAddress?.address_type ?? 'Other'}
                 </Typography>
               </View>
               <Typography
                 style={styles.addressText}
-                variant={TypographyVariants.body2}>
+                variant={TypographyVariants.body2}
+              >
                 {convertedOtherAddress?.address_text
                   ? `${
                       convertedOtherAddress?.address_text
@@ -390,7 +394,8 @@ export const AddressBottomSheet = React.forwardRef((props: any, ref) => {
           </View>
           <TouchableOpacity
             onPress={() => onCLickMapIcon(convertedOtherAddress)}
-            style={styles.mapIconContainer}>
+            style={styles.mapIconContainer}
+          >
             <MapIcon color="#043E90" size={17} />
           </TouchableOpacity>
         </View>
@@ -414,7 +419,8 @@ export const AddressBottomSheet = React.forwardRef((props: any, ref) => {
             </View>
           );
         }}
-        style={styles.contentContainer}>
+        style={styles.contentContainer}
+      >
         {loading ? (
           <View style={styles.loadingContainer}>
             <CustomActivityIndicator />
@@ -423,12 +429,14 @@ export const AddressBottomSheet = React.forwardRef((props: any, ref) => {
           <BottomSheetScrollView scrollEnabled={true}>
             <View
               style={{
-                paddingHorizontal: RFPercentage(0.8),
-              }}>
+                paddingHorizontal: RFPercentage(0.8)
+              }}
+            >
               <OnlineOnly>
                 <TouchableOpacity
                   style={styles.addAddressContainer}
-                  onPress={onClickAddAddress}>
+                  onPress={onClickAddAddress}
+                >
                   <AddIcon />
                   <Typography style={styles.addAddressText}>
                     Add Address
@@ -437,7 +445,7 @@ export const AddressBottomSheet = React.forwardRef((props: any, ref) => {
               </OnlineOnly>
               <DashedLine
                 style={{
-                  marginVertical: RFPercentage(1.2),
+                  marginVertical: RFPercentage(1.2)
                 }}
                 dashThickness={1}
                 dashGap={4}
@@ -454,11 +462,12 @@ export const AddressBottomSheet = React.forwardRef((props: any, ref) => {
                     {`Last Visited on ${lastVisited?.visit_date ?? ''} `}
                   </Typography>
 
-                  <View style={{flexDirection: 'row'}}>
+                  <View style={{ flexDirection: 'row' }}>
                     <View style={styles.lastVisitedCard}>
                       <Typography
                         style={styles.addressText}
-                        variant={TypographyVariants.body2}>
+                        variant={TypographyVariants.body2}
+                      >
                         {lastVisited?.marked_location.latitude + ',' ?? ' '}{' '}
                         {lastVisited?.marked_location?.longitude ?? ' '}
                       </Typography>
@@ -466,7 +475,8 @@ export const AddressBottomSheet = React.forwardRef((props: any, ref) => {
 
                     <TouchableOpacity
                       onPress={() => onClickLastVisited(data?.last_location)}
-                      style={styles.mapIconContainer}>
+                      style={styles.mapIconContainer}
+                    >
                       <MapIcon size={17} color="#043E90" />
                     </TouchableOpacity>
                   </View>
@@ -480,19 +490,20 @@ export const AddressBottomSheet = React.forwardRef((props: any, ref) => {
               )}
               <DashedLine
                 style={{
-                  marginTop: RFPercentage(2),
+                  marginTop: RFPercentage(2)
                 }}
                 dashThickness={0.3}
                 dashGap={4}
                 dashColor="#4366AD"
               />
-              <View style={{flex: 1, flexGrow: 1}}>
+              <View style={{ flex: 1, flexGrow: 1 }}>
                 {SavedAddress?.length > 0 ? (
                   <Typography
                     style={[
                       styles.addressHeaderText,
-                      {fontSize: RFPercentage(2.1)},
-                    ]}>
+                      { fontSize: RFPercentage(2.1) }
+                    ]}
+                  >
                     Other Addresses
                   </Typography>
                 ) : null}
@@ -506,11 +517,11 @@ export const AddressBottomSheet = React.forwardRef((props: any, ref) => {
                   <Button
                     onPress={!scrollable ? expandSheet : collapseSheet}
                     title={!scrollable ? 'See More' : 'See Less'}
-                    containerStyle={styles.buttonContainer}
+                    buttonStyle={styles.buttonContainer}
                     titleStyle={styles.buttonTitle}
                     iconRight
                     iconContainerStyle={{
-                      marginLeft: RFPercentage(1),
+                      marginLeft: RFPercentage(1)
                     }}
                     icon={!scrollable ? <ChevronDown /> : <ChevronUp />}
                   />
@@ -528,33 +539,33 @@ const styles = StyleSheet.create({
   addAddressContainer: {
     alignItems: 'center',
     flexDirection: 'row',
-    justifyContent: 'flex-start',
+    justifyContent: 'flex-start'
   },
   addAddressText: {
     fontFamily: TypographyFontFamily.heavy,
     fontSize: RFPercentage(2.2),
-    marginLeft: RFPercentage(0.8),
+    marginLeft: RFPercentage(0.8)
   },
   addressCard: {
     alignItems: 'flex-start',
     flexDirection: 'column',
     justifyContent: 'center',
-    marginVertical: RFPercentage(1.3),
+    marginVertical: RFPercentage(1.3)
   },
   addressHeader: {
     alignItems: 'center',
     flexDirection: 'row',
     justifyContent: 'flex-start',
-    marginVertical: RFPercentage(1),
+    marginVertical: RFPercentage(1)
   },
   addressHeaderText: {
     fontFamily: TypographyFontFamily.heavy,
     fontSize: RFPercentage(2.1),
-    marginTop: RFPercentage(1.2),
+    marginTop: RFPercentage(1.2)
   },
   addressText: {
     color: '#909195',
-    lineHeight: RFPercentage(2.5),
+    lineHeight: RFPercentage(2.5)
   },
   buttonContainer: {
     alignContent: 'center',
@@ -565,43 +576,43 @@ const styles = StyleSheet.create({
     height: RFPercentage(4.5),
     justifyContent: 'center',
     marginVertical: RFPercentage(2),
-    width: RFPercentage(38),
+    width: RFPercentage(38)
   },
   buttonTitle: {
     alignSelf: 'center',
     color: '#043E90',
     fontFamily: TypographyFontFamily.normal,
     fontSize: RFPercentage(2),
-    marginRight: RFPercentage(1),
+    marginRight: RFPercentage(1)
   },
   contentContainer: {
-    paddingHorizontal: RFPercentage(2),
+    paddingHorizontal: RFPercentage(2)
   },
   handleComponent: {
     alignItems: 'center',
     flexDirection: 'row',
     justifyContent: 'center',
-    marginBottom: RFPercentage(2),
+    marginBottom: RFPercentage(2)
   },
   lastVisitedCard: {
     flexDirection: 'row',
     flex: 5,
     marginHorizontal: RFPercentage(1),
-    marginTop: RFPercentage(1),
+    marginTop: RFPercentage(1)
   },
   lineStyle: {
     backgroundColor: 'rgba(0,0,0,0.1)',
     height: 0.5,
-    width: '100%',
+    width: '100%'
   },
   loadingContainer: {
     backgroundColor: '#f6f8fb',
     flex: 1,
-    justifyContent: 'center',
+    justifyContent: 'center'
   },
   mapIconContainer: {
     alignItems: 'center',
     flex: 1,
-    justifyContent: 'center',
-  },
+    justifyContent: 'center'
+  }
 });

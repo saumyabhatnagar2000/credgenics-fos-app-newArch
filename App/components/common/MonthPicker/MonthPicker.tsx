@@ -1,13 +1,13 @@
 import * as React from 'react';
-import {Button} from 'react-native-elements';
-import {StyleSheet, TouchableOpacity, View} from 'react-native';
-import {Modal, Portal} from 'react-native-paper';
-import {MonthPickerType} from '../../../../types';
-import {BLUE, BLUE_DARK} from '../../../constants/Colors';
-import {RFPercentage} from 'react-native-responsive-fontsize';
+import { Button } from '@rneui/base';
+import { StyleSheet, TouchableOpacity, View } from 'react-native';
+import { Modal, Portal } from 'react-native-paper';
+import { MonthPickerType } from '../../../../types';
+import { BLUE, BLUE_DARK } from '../../../constants/Colors';
+import { RFPercentage } from 'react-native-responsive-fontsize';
 import Typography, {
   TypographyFontFamily,
-  TypographyVariants,
+  TypographyVariants
 } from '../../ui/Typography';
 
 export default function MonthPicker({
@@ -15,7 +15,7 @@ export default function MonthPicker({
   allocationMonth,
   visible,
   setVisible,
-  onSelected,
+  onSelected
 }: MonthPickerType) {
   const monthList = [
     'Jan',
@@ -29,7 +29,7 @@ export default function MonthPicker({
     'Sep',
     'Oct',
     'Nov',
-    'Dec',
+    'Dec'
   ];
   const [month, setMonth] = React.useState(monthList[allocationMonth - 1]);
   const [year, setYear] = React.useState(allocationYear);
@@ -71,10 +71,12 @@ export default function MonthPicker({
         visible={visible}
         dismissable={true}
         onDismiss={() => setVisible(false)}
-        contentContainerStyle={styles.containerStyle}>
+        contentContainerStyle={styles.containerStyle}
+      >
         <Typography
           style={styles.headerText}
-          variant={TypographyVariants.title}>
+          variant={TypographyVariants.title}
+        >
           Allocation Month
         </Typography>
         <View
@@ -82,20 +84,22 @@ export default function MonthPicker({
             flexDirection: 'row',
             justifyContent: 'space-evenly',
             alignItems: 'center',
-            marginBottom: RFPercentage(1.6),
-          }}>
+            marginBottom: RFPercentage(1.6)
+          }}
+        >
           <Button
             title="PREV"
             titleStyle={styles.buttonStyle}
             buttonStyle={{
               backgroundColor: BLUE,
-              paddingHorizontal: RFPercentage(2.4),
+              paddingHorizontal: RFPercentage(2.4)
             }}
             onPress={() => setYear(year - 1)}
           />
           <Typography
             variant={TypographyVariants.title}
-            style={{flex: 1, textAlign: 'center'}}>
+            style={{ flex: 1, textAlign: 'center' }}
+          >
             {year}
           </Typography>
           <Button
@@ -103,11 +107,11 @@ export default function MonthPicker({
             titleStyle={styles.buttonStyle}
             buttonStyle={[
               year === new Date().getFullYear()
-                ? {backgroundColor: 'gray'}
-                : {backgroundColor: BLUE},
+                ? { backgroundColor: 'gray' }
+                : { backgroundColor: BLUE },
               {
-                paddingHorizontal: RFPercentage(2.4),
-              },
+                paddingHorizontal: RFPercentage(2.4)
+              }
             ]}
             onPress={() => {
               if (year < new Date().getFullYear()) {
@@ -117,12 +121,13 @@ export default function MonthPicker({
           />
         </View>
         <View style={styles.rowStyle}>
-          {monthList.slice(0, 3).map(month => {
+          {monthList.slice(0, 3).map((month) => {
             const style = getMonthStyle(month);
             return (
               <TouchableOpacity
                 key={month}
-                onPress={() => onMonthSelected(month)}>
+                onPress={() => onMonthSelected(month)}
+              >
                 <Typography style={style} variant={TypographyVariants.title1}>
                   {month}
                 </Typography>
@@ -131,12 +136,13 @@ export default function MonthPicker({
           })}
         </View>
         <View style={styles.rowStyle}>
-          {monthList.slice(3, 6).map(month => {
+          {monthList.slice(3, 6).map((month) => {
             const style = getMonthStyle(month);
             return (
               <TouchableOpacity
                 key={month}
-                onPress={() => onMonthSelected(month)}>
+                onPress={() => onMonthSelected(month)}
+              >
                 <Typography style={style} variant={TypographyVariants.title1}>
                   {month}
                 </Typography>
@@ -145,12 +151,13 @@ export default function MonthPicker({
           })}
         </View>
         <View style={styles.rowStyle}>
-          {monthList.slice(6, 9).map(month => {
+          {monthList.slice(6, 9).map((month) => {
             const style = getMonthStyle(month);
             return (
               <TouchableOpacity
                 key={month}
-                onPress={() => onMonthSelected(month)}>
+                onPress={() => onMonthSelected(month)}
+              >
                 <Typography style={style} variant={TypographyVariants.title1}>
                   {month}
                 </Typography>
@@ -159,12 +166,13 @@ export default function MonthPicker({
           })}
         </View>
         <View style={styles.rowStyle}>
-          {monthList.slice(9, 12).map(month => {
+          {monthList.slice(9, 12).map((month) => {
             const style = getMonthStyle(month);
             return (
               <TouchableOpacity
                 key={month}
-                onPress={() => onMonthSelected(month)}>
+                onPress={() => onMonthSelected(month)}
+              >
                 <Typography style={style} variant={TypographyVariants.title1}>
                   {month}
                 </Typography>
@@ -180,7 +188,7 @@ export default function MonthPicker({
 const styles = StyleSheet.create({
   buttonStyle: {
     fontFamily: TypographyFontFamily.heavy,
-    fontSize: RFPercentage(1.8),
+    fontSize: RFPercentage(1.8)
   },
   containerStyle: {
     alignContent: 'center',
@@ -190,31 +198,31 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     justifyContent: 'flex-start',
     padding: RFPercentage(3),
-    width: '80%',
+    width: '80%'
   },
   disabledMonth: {
     color: 'gray',
-    margin: 20,
+    margin: 20
   },
   headerText: {
     marginBottom: RFPercentage(3),
-    textAlign: 'center',
+    textAlign: 'center'
   },
   monthText: {
     color: BLUE_DARK,
-    margin: 20,
+    margin: 20
   },
   rowStyle: {
     alignItems: 'center',
     flexDirection: 'row',
     justifyContent: 'space-between',
-    width: '96%',
+    width: '96%'
   },
   selectedMonth: {
     backgroundColor: BLUE_DARK,
     borderRadius: RFPercentage(1),
     color: 'white',
     paddingHorizontal: RFPercentage(2),
-    paddingVertical: RFPercentage(1.2),
-  },
+    paddingVertical: RFPercentage(1.2)
+  }
 });

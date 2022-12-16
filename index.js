@@ -1,4 +1,5 @@
 import ReactNativeForegroundService from '@supersami/rn-foreground-service';
+import 'react-native-get-random-values';
 /**
  * @format
  */

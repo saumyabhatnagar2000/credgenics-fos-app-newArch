@@ -1,8 +1,14 @@
 import * as React from 'react';
-import { Button, Image, Linking, StyleSheet, Text, View } from 'react-native';
+import { Image, Linking, StyleSheet, Text, View } from 'react-native';
+import { RFPercentage } from 'react-native-responsive-fontsize';
+import Typography, {
+    TypographyFontFamily,
+    TypographyVariants
+} from '../components/ui/Typography';
+import { Button } from '@rneui/base';
 import Layout from '../constants/Layout';
 
-const appIcon = require('../../assets/images/icon.png');
+const appIcon = require('../../assets/images/cg-collect-logo.png');
 
 const PLAYSTORE_URL =
     'http://play.google.com/store/apps/details?id=com.credgenics.fos';
@@ -11,21 +17,37 @@ export default function UpdateAvailableScreen() {
     return (
         <View style={styles.container}>
             <View>
-                <Image style={{ height: 128, width: 128 }} source={appIcon} />
-                <Text style={styles.heading}>CG Collect </Text>
+                <Image
+                    resizeMode="contain"
+                    style={{ height: 150, width: 150 }}
+                    source={appIcon}
+                />
             </View>
 
             <View>
-                <Text style={styles.title}>Update Available</Text>
-                <Text style={[styles.text, { fontSize: 14 }]}>
+                <Typography
+                    variant={TypographyVariants.heading2}
+                    style={styles.title}
+                >
+                    Update Available
+                </Typography>
+                <Typography
+                    variant={TypographyVariants.body}
+                    style={[styles.text]}
+                >
                     We have released a new version of the app with the latest
                     features.
-                </Text>
+                </Typography>
             </View>
-            <View style={{ width: Layout.window.width * 0.28 }}>
+            <View style={{ width: Layout.window.width * 0.35 }}>
                 <Button
                     color="#5278C7"
                     title="Update"
+                    titleStyle={styles.buttonTitleStyle}
+                    buttonStyle={{
+                        borderRadius: 4,
+                        backgroundColor: '#043E90'
+                    }}
                     onPress={async () =>
                         (await Linking.canOpenURL(PLAYSTORE_URL)) &&
                         Linking.openURL(PLAYSTORE_URL)
@@ -51,13 +73,18 @@ const styles = StyleSheet.create({
         textAlign: 'center'
     },
     text: {
-        fontSize: 12,
+        color: '#000',
         padding: 8,
-        textAlign: 'center'
+        textAlign: 'center',
+        marginVertical: RFPercentage(2),
+        lineHeight: 18,
+        fontSize: 16
     },
     title: {
-        fontSize: 24,
-        fontWeight: 'bold',
         textAlign: 'center'
+    },
+    buttonTitleStyle: {
+        fontFamily: TypographyFontFamily.medium,
+        fontSize: RFPercentage(2)
     }
 });
