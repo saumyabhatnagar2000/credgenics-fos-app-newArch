@@ -20,7 +20,7 @@ export const MockLocationEnabledModal = ({
             negativeButtonLabel="Close App"
             showOnlyNegative
             negativeAction={() => {
-                BackHandler.exitApp();
+                KillAppProcess();
             }}
             positiveAction={() => {
                 setVisible(false);

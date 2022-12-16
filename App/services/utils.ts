@@ -447,6 +447,6 @@ export const getDecimalCountInString = (amount: string) => {
 
 export const KillAppProcess = () => {
     try {
-        // return NativeModules.ExitApp.exitApp();
+        return NativeModules.ExitApp.exitApp();
     } catch {}
 };
