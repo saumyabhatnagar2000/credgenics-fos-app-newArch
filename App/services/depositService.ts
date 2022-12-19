@@ -173,25 +173,6 @@ export const makeDepsoit = async (
     return response;
 };
 
-export const loadDepositBranch = async (
-    branchType: string,
-    authData?: AuthData
-) => {
-    const url = `${RECOVERY_SERVICE_BASE_URL}/deposit/details?company_id=${authData?.company_id}&branch_type=${branchType}`;
-    const response = await apiRequest({
-        url,
-        headers: {
-            authenticationtoken: authData?.authenticationtoken,
-            role: authData?.role
-        }
-    });
-
-    if (response && response.data) {
-        if (response?.data?.message === 'success') return response.data.output;
-    }
-    return [];
-};
-
 export const getDepositDetails = async (
     depositId: string,
     authData?: AuthData

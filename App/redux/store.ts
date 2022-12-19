@@ -1,7 +1,6 @@
 import { combineReducers, configureStore, AnyAction } from '@reduxjs/toolkit';
 import { persistStore, persistReducer } from 'redux-persist';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import counterSlice from './counterSlice';
 import portfolioSlice from './portfolioSlice';
 import taskSlice from './taskSlice';
 import configSlice from './configSlice';
@@ -10,7 +9,6 @@ import loanDetailSlice from './loanDetailSlice';
 import offlineVisitDataSlice from './offlineVisitDataSlice';
 
 const appReducer = combineReducers({
-    counter: counterSlice,
     portfolio: portfolioSlice,
     task: taskSlice,
     config: configSlice,

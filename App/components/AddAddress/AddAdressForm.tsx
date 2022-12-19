@@ -127,7 +127,7 @@ export const AddAddressForm = ({
                                 }
                             });
                         }
-                    } catch {
+                    } catch(e) {
                         ToastAndroid.show(
                             'Some error occurred',
                             ToastAndroid.SHORT

@@ -26,8 +26,7 @@ import {
     closeVisit,
     generateVisitOtp,
     getFieldVisitHistory,
-    getTransactionData,
-    submitTask
+    getTransactionData
 } from '../../services/taskService';
 import { useTaskAction } from '../../hooks/useTaskAction';
 import {

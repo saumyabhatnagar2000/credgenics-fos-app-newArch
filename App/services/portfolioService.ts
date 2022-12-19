@@ -1,24 +1,8 @@
 import {
-    getToday,
-    getTomorrow,
-    getWeekStartDate,
-    getWeekEndDate,
-    getMonthStartDate,
-    getMonthEndDate,
-    getYesterday
-} from './utils';
-import {
     CompanyType,
-    FilterTaskTypesText,
     PortfolioFilterType,
     RequestMethods,
     SortPortfolioTypes,
-    TaskCreatorType,
-    TaskFilterType,
-    TaskHistoryFilterType,
-    TaskOptions,
-    TaskRecoveryType,
-    TaskStatusTypes
 } from './../../enums';
 import {
     AuthData,
@@ -32,7 +16,6 @@ import {
 import Urls from '../constants/Urls';
 import { SortValue, TaskTypes } from '../../enums';
 import { apiRequest } from './apiRequest';
-import { sortBy } from 'lodash';
 
 const { FOS_SERVICE_BASE_URL, RECOVERY_SERVICE_BASE_URL, BASE_URL } = Urls;
 
